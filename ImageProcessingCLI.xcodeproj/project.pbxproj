@@ -6,11 +6,6 @@
 	objectVersion = 46;
 	objects = {
 
-/* Begin PBXBuildFile section */
-		88C9ADA11C41A28C00E5CA26 /* IP.m in Sources */ = {isa = PBXBuildFile; fileRef = 88C9AD9F1C41A28C00E5CA26 /* IP.m */; };
-		88C9ADA21C41A28C00E5CA26 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 88C9ADA01C41A28C00E5CA26 /* main.m */; };
-/* End PBXBuildFile section */
-
 /* Begin PBXCopyFilesBuildPhase section */
 		88C9AD921C41A27100E5CA26 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -25,9 +20,6 @@
 
 /* Begin PBXFileReference section */
 		88C9AD941C41A27100E5CA26 /* ImageProcessingCLI */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ImageProcessingCLI; sourceTree = BUILT_PRODUCTS_DIR; };
-		88C9AD9E1C41A28C00E5CA26 /* IP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IP.h; path = ../../../../Desktop/ImageProcessingCLI/IP.h; sourceTree = "<group>"; };
-		88C9AD9F1C41A28C00E5CA26 /* IP.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IP.m; path = ../../../../Desktop/ImageProcessingCLI/IP.m; sourceTree = "<group>"; };
-		88C9ADA01C41A28C00E5CA26 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = ../../../../Desktop/ImageProcessingCLI/main.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,9 +52,6 @@
 		88C9AD961C41A27100E5CA26 /* ImageProcessingCLI */ = {
 			isa = PBXGroup;
 			children = (
-				88C9AD9E1C41A28C00E5CA26 /* IP.h */,
-				88C9AD9F1C41A28C00E5CA26 /* IP.m */,
-				88C9ADA01C41A28C00E5CA26 /* main.m */,
 			);
 			path = ImageProcessingCLI;
 			sourceTree = "<group>";
@@ -123,8 +112,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				88C9ADA11C41A28C00E5CA26 /* IP.m in Sources */,
-				88C9ADA21C41A28C00E5CA26 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -243,6 +230,7 @@
 				88C9AD9D1C41A27100E5CA26 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
