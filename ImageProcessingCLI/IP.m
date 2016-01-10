@@ -40,6 +40,7 @@
 
 - (void) smoothWithSimpleAveragingFilterOfSize:(int)size
 {
+    float weight = 1.0 / (float)size;
     
     for ( int y = 1; y < self.height - 1; y++ )
     {
