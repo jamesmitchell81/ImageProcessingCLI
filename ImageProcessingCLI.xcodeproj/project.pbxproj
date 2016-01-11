@@ -6,6 +6,12 @@
 	objectVersion = 46;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		880EFE361C42D21200896838 /* IntArrayUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 880EFE351C42D21200896838 /* IntArrayUtility.m */; };
+		885FCD011C42848600D064A3 /* IP.m in Sources */ = {isa = PBXBuildFile; fileRef = 885FCCFF1C42848600D064A3 /* IP.m */; };
+		885FCD021C42848600D064A3 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 885FCD001C42848600D064A3 /* main.m */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXCopyFilesBuildPhase section */
 		88C9AD921C41A27100E5CA26 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -19,6 +25,11 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		880EFE341C42D21200896838 /* IntArrayUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IntArrayUtility.h; sourceTree = "<group>"; };
+		880EFE351C42D21200896838 /* IntArrayUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IntArrayUtility.m; sourceTree = "<group>"; };
+		885FCCFE1C42848600D064A3 /* IP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IP.h; sourceTree = "<group>"; };
+		885FCCFF1C42848600D064A3 /* IP.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IP.m; sourceTree = "<group>"; };
+		885FCD001C42848600D064A3 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		88C9AD941C41A27100E5CA26 /* ImageProcessingCLI */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ImageProcessingCLI; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -52,6 +63,11 @@
 		88C9AD961C41A27100E5CA26 /* ImageProcessingCLI */ = {
 			isa = PBXGroup;
 			children = (
+				885FCCFE1C42848600D064A3 /* IP.h */,
+				885FCCFF1C42848600D064A3 /* IP.m */,
+				885FCD001C42848600D064A3 /* main.m */,
+				880EFE341C42D21200896838 /* IntArrayUtility.h */,
+				880EFE351C42D21200896838 /* IntArrayUtility.m */,
 			);
 			path = ImageProcessingCLI;
 			sourceTree = "<group>";
@@ -112,6 +128,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				885FCD021C42848600D064A3 /* main.m in Sources */,
+				885FCD011C42848600D064A3 /* IP.m in Sources */,
+				880EFE361C42D21200896838 /* IntArrayUtility.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

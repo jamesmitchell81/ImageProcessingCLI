@@ -15,6 +15,8 @@
     int filter[9];
     int median;
     
+    unsigned char *new = malloc((self.width * self.height) * sizeof(unsigned char));
+    
     for ( int y = 1; y < self.height - 1; y++ )
     {
         for (int x = 1; x < self.width - 1; x++)
@@ -32,32 +34,54 @@
             
             median = [self getMedianFromArray:filter ofSize:9];
 
-            self.pixels[centre] = median;
+            new[centre] = median;
         }
     }
     
+    *self.pixels = *new;
 }
 
-- (void) smoothWithSimpleAveragingFilterOfSize:(int)size
+
+- (NSBitmapImageRep *) smoothWithSimpleAveragingFilterOfSize:(int)size
 {
+    
+    NSBitmapImageRep *representation = [self grayScaleRepresentationOfImage:self.image];
+    unsigned char *original = [representation bitmapData];
+    
+    NSBitmapImageRep *output = [self grayScaleRepresentationOfImage:self.image];
+    unsigned char *smoothed = [output bitmapData];
+
     float weight = 1.0 / (float)size;
+    int padding = ((float)size / 3.0) / 2.0;
     
-    for ( int y = 1; y < self.height - 1; y++ )
-    {
-        for (int x = 1; x < self.width - 1; x++)
-        {
-//            int centre = x + y * self.width;
+    for ( int y = padding; y < self.height - padding; y++ ) {
+        for (int x = padding; x < self.width - padding; x++) {
             
-//            self.pixels[centre] = median;
+            int centre = x + y * self.width;
+            int val = 0;
+            
+            for (int s = -padding; s < (padding + 1); s++) {
+                for (int t = -padding; t < (padding + 1); t++) {
+                    
+                    int index = (x + s) + ((y + t) * self.width);
+                    val += original[index] * weight;
+
+                }
+            }
+
+            if ( val > 255 ) val = 255;
+            smoothed[centre] = val;
         }
     }
+    
+    return output;
 }
 
-- (int) getMedianFromArray:(int [])arr ofSize:(int)size
+- (void) bubbleSort:(int *)arr ofSize:(int)size
 {
+    
     BOOL swap;
     int temp;
-    int middle = (int)(size / 2);
     
     do {
         swap = NO;
@@ -73,6 +97,27 @@
             }
         }
     } while (swap);
+    
+    
+}
+
+- (int) maxFromArray:(int [])arr ofSize:(int)size
+{
+    [self bubbleSort:arr ofSize:size];
+    return arr[size];
+}
+
+- (int) minFromArray:(int [])arr ofSize:(int)size
+{
+    [self bubbleSort:arr ofSize:size];
+    return arr[0];
+}
+
+- (int) getMedianFromArray:(int [])arr ofSize:(int)size
+{
+    int middle = (int)(size / 2);
+
+    [self bubbleSort:arr ofSize:size];
     
     return arr[middle];
 }
@@ -101,22 +146,27 @@
  *
  *
  */
-- (void) thresholdWithValue:(int)value
+- (NSBitmapImageRep *) thresholdWithValue:(int)value
 {
+    
+    NSBitmapImageRep *output = [self grayScaleRepresentationOfImage:self.image];
+    unsigned char *threshold = [output bitmapData];
+    
     
     for ( int y = 0; y < self.height; y++ )
     {
         for ( int x = 0; x < self.width; x++ )
         {
             int index = x + (y * self.width);
-            if ( self.pixels[index] < value) {
-                self.pixels[index] = 0;
+            if ( threshold[index] < value) {
+                threshold[index] = 0;
             } else {
-                self.pixels[index] = 255;
+                threshold[index] = 255;
             }
         }
     }
     
+    return output;
 }
 
 
@@ -149,13 +199,31 @@
  *
  */
 - (void) saveImageFileFromRepresentation:(NSBitmapImageRep *)representation
+                                fileName:(NSString*)filename
 {
+//    NSString *filePath = @"~/Desktop/";
+    NSMutableString *saveTo = [NSMutableString stringWithString:@"~/Desktop/"];
+    [saveTo appendString:filename];
+    [saveTo appendString:@".png"];
+    
     NSDictionary *imageProps = [NSDictionary dictionaryWithObject:[NSNumber numberWithFloat:1.0]
                                                            forKey:NSImageCompressionFactor];
     
-    NSData *newFile = [representation representationUsingType:NSPNGFileType properties:imageProps];
-    [newFile writeToFile:[@"~/Desktop/screenshot.png" stringByExpandingTildeInPath]
+    NSData *newFile = [representation representationUsingType:NSPNGFileType
+                                                   properties:imageProps];
+
+    [newFile writeToFile:[saveTo stringByExpandingTildeInPath]
               atomically:NO];
 }
 
+
+- (void) cacheImageFromRepresentation:(NSBitmapImageRep *)representation
+{
+
+    NSData *newData = [representation representationUsingType:NSPNGFileType properties:Nil];
+    self.image = [[NSImage alloc] initWithData:newData];
+}
+
+
 @end
+

@@ -12,16 +12,27 @@
 
 @interface IP : NSObject
 
+@property NSImage *image;
 @property int width;
 @property int height;
 @property unsigned char *pixels;
 
-- (void) reduceNoiseWithMedianFilter;
-- (void) smoothWithSimpleAveragingFilterOfSize:(int)size;
+- (void) bubbleSort:(int *)arr ofSize:(int)size;
 - (int) getMedianFromArray:(int [])arr ofSize:(int)size;
+- (int) maxFromArray:(int [])arr ofSize:(int)size;
+- (int) minFromArray:(int [])arr ofSize:(int)size;
+
+- (void) reduceNoiseWithMedianFilter;
+- (NSBitmapImageRep *) smoothWithSimpleAveragingFilterOfSize:(int)size;
 - (NSImage *) reduceNoiseWithCIMedianFilterOnImage:(NSImage *)image;
-- (void) thresholdWithValue:(int)value;
+
+- (NSBitmapImageRep *) thresholdWithValue:(int)value;
+
+- (void) cacheImageFromRepresentation:(NSBitmapImageRep *)representation;
+
 - (NSBitmapImageRep *) grayScaleRepresentationOfImage:(NSImage *)image;
-- (void) saveImageFileFromRepresentation:(NSBitmapImageRep *)representation;
+
+- (void) saveImageFileFromRepresentation:(NSBitmapImageRep *)representation
+                                fileName:(NSString*)filename;
 
 @end
