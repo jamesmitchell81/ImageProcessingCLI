@@ -10,72 +10,177 @@
 
 @implementation IP
 
-- (void) reduceNoiseWithMedianFilter
+- (NSBitmapImageRep *) reduceNoiseWithMedianFilterOfSize:(int)size
 {
-    int filter[9];
-    int median;
-    
-    unsigned char *new = malloc((self.width * self.height) * sizeof(unsigned char));
-    
-    for ( int y = 1; y < self.height - 1; y++ )
-    {
-        for (int x = 1; x < self.width - 1; x++)
-        {
-            int centre = x + y * self.width;
-            filter[0] = self.pixels[(x - 1) + ((y - 1) * self.width)];
-            filter[1] = self.pixels[(x) + ((y - 1) * self.width)];
-            filter[2] = self.pixels[(x + 1) + ((y - 1) * self.width)];
-            filter[3] = self.pixels[(x - 1) + ((y) * self.width)];
-            filter[4] = self.pixels[x + y * self.width];
-            filter[5] = self.pixels[(x + 1) + ((y) * self.width)];
-            filter[6] = self.pixels[(x - 1) + ((y + 1) * self.width)];
-            filter[7] = self.pixels[(x) + ((y + 1) * self.width)];
-            filter[8] = self.pixels[(x + 1) + ((y + 1) * self.width)];
-            
-            median = [self getMedianFromArray:filter ofSize:9];
+    // create a represenation of the origional image
+    NSBitmapImageRep *representation = [self grayScaleRepresentationOfImage:self.image];
+    unsigned char *original = [representation bitmapData];
 
-            new[centre] = median;
+    // create a representation that will store the smoothed image.
+    NSBitmapImageRep *output = [self grayScaleRepresentationOfImage:self.image];
+    unsigned char *smoothed = [output bitmapData];
+    
+    int padding = (size - 1) / 2.0;
+    int filter[size * size];
+    
+    for ( int y = padding; y < self.height - padding; y++ ) {
+        for (int x = padding; x < self.width - padding; x++) {
+            
+            int centre = x + y * self.width;
+            int i = 0;
+            
+            for (int s = -padding; s < (padding + 1); s++) {
+                
+                for (int t = -padding; t < (padding + 1); t++) {
+                    
+                    int index = (x + s) + ((y + t) * self.width);
+                    filter[i++] = original[index];
+                    
+                }
+            }
+            
+            smoothed[centre] = [self getMedianFromArray:filter ofSize:size];
         }
     }
     
-    *self.pixels = *new;
+    return output;
+}
+
+- (NSBitmapImageRep *) reduceNoiseWithMaxFilterOfSize:(int)size
+{
+    // create a represenation of the origional image
+    NSBitmapImageRep *representation = [self grayScaleRepresentationOfImage:self.image];
+    unsigned char *original = [representation bitmapData];
+    
+    // create a representation that will store the smoothed image.
+    NSBitmapImageRep *output = [self grayScaleRepresentationOfImage:self.image];
+    unsigned char *smoothed = [output bitmapData];
+    
+    int padding = (size - 1) / 2.0;
+    int filter[size * size];
+    
+    for ( int y = padding; y < self.height - padding; y++ ) {
+        for (int x = padding; x < self.width - padding; x++) {
+            
+            int centre = x + y * self.width;
+            int i = 0;
+            
+            for (int s = -padding; s < (padding + 1); s++) {
+                
+                for (int t = -padding; t < (padding + 1); t++) {
+                    
+                    int index = (x + s) + ((y + t) * self.width);
+                    filter[i++] = original[index];
+                    
+                }
+            }
+            
+            smoothed[centre] = [self minFromArray:filter ofSize:size];
+        }
+    }
+    
+    return output;
 }
 
 
 - (NSBitmapImageRep *) smoothWithSimpleAveragingFilterOfSize:(int)size
 {
     
+    // create a represenation of the origional image
     NSBitmapImageRep *representation = [self grayScaleRepresentationOfImage:self.image];
     unsigned char *original = [representation bitmapData];
     
+    // create a representation that will store the smoothed image.
     NSBitmapImageRep *output = [self grayScaleRepresentationOfImage:self.image];
     unsigned char *smoothed = [output bitmapData];
 
-    float weight = 1.0 / (float)size;
-    int padding = ((float)size / 3.0) / 2.0;
+    float weight = 1.0 / (float)(size * size); // e.g. 1/(3 * 3) = 0.111
+    int padding = (size - 1) / 2.0;  // pad the image
     
+    // iterate over each pixel of the image
     for ( int y = padding; y < self.height - padding; y++ ) {
         for (int x = padding; x < self.width - padding; x++) {
             
+            // find the centre pixel.
             int centre = x + y * self.width;
             int val = 0;
             
+            // iterate over the filter
             for (int s = -padding; s < (padding + 1); s++) {
                 for (int t = -padding; t < (padding + 1); t++) {
                     
+                    // offset the current x, y
                     int index = (x + s) + ((y + t) * self.width);
+                    // add the values
                     val += original[index] * weight;
 
                 }
             }
 
+            // reject values over 255 to prevent
             if ( val > 255 ) val = 255;
+            // apply the new value to centre of the filter
             smoothed[centre] = val;
         }
     }
     
     return output;
 }
+
+- (NSBitmapImageRep *) smoothWithWeightedAveragingFilterOfSize:(int)size
+{
+    
+    // create a represenation of the origional image
+    NSBitmapImageRep *representation = [self grayScaleRepresentationOfImage:self.image];
+    unsigned char *original = [representation bitmapData];
+    
+    // create a representation that will store the smoothed image.
+    NSBitmapImageRep *output = [self grayScaleRepresentationOfImage:self.image];
+    unsigned char *smoothed = [output bitmapData];
+    
+    int padding = (3 - 1) / 2.0;  // pad the image
+    
+    int weights[9] = {1, 2, 1, 2, 4, 2, 1, 2, 1};
+    float filter[9];
+    
+    // make filter
+    for (int i = 0; i < 9; i++)
+    {
+        filter[i] = (float)weights[i] / 16.0;
+    }
+    
+    
+    // iterate over each pixel of the image
+    for ( int y = padding; y < self.height - padding; y++ ) {
+        for (int x = padding; x < self.width - padding; x++) {
+            
+            // find the centre pixel.
+            int centre = x + y * self.width;
+            int val = 0;
+            int i = 0;
+            
+            // iterate over the filter
+            for (int s = -padding; s < (padding + 1); s++) {
+                for (int t = -padding; t < (padding + 1); t++) {
+                    
+                    // offset the current x, y
+                    int index = (x + s) + ((y + t) * self.width);
+                    // add the values
+                    val += original[index] * filter[i++];
+                    
+                }
+            }
+            
+            // reject values over 255 to prevent
+            if ( val > 255 ) val = 255;
+            // apply the new value to centre of the filter
+            smoothed[centre] = val;
+        }
+    }
+    
+    return output;
+}
+
 
 - (void) bubbleSort:(int *)arr ofSize:(int)size
 {
@@ -181,7 +286,7 @@
                                         hasAlpha: NO
                                         isPlanar: NO
                                         colorSpaceName: NSCalibratedWhiteColorSpace
-                                        bytesPerRow: self.width // * 4
+                                        bytesPerRow: self.width //* 4
                                         bitsPerPixel: 8];
     
     NSGraphicsContext *context = [NSGraphicsContext graphicsContextWithBitmapImageRep:representation];

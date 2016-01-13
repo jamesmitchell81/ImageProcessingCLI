@@ -22,8 +22,10 @@
 - (int) maxFromArray:(int [])arr ofSize:(int)size;
 - (int) minFromArray:(int [])arr ofSize:(int)size;
 
-- (void) reduceNoiseWithMedianFilter;
+- (NSBitmapImageRep *) reduceNoiseWithMedianFilterOfSize:(int)size;
+- (NSBitmapImageRep *) reduceNoiseWithMaxFilterOfSize:(int)size;
 - (NSBitmapImageRep *) smoothWithSimpleAveragingFilterOfSize:(int)size;
+- (NSBitmapImageRep *) smoothWithWeightedAveragingFilterOfSize:(int)size;
 - (NSImage *) reduceNoiseWithCIMedianFilterOnImage:(NSImage *)image;
 
 - (NSBitmapImageRep *) thresholdWithValue:(int)value;

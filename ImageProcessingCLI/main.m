@@ -17,10 +17,11 @@ int main(int argc, const char * argv[]) {
     @autoreleasepool {
 
         IP *ip = [IP alloc];
-
-        NSString *file = [@"~/Documents/School 3/-Dissertation/6b. Image Processing And Analysis/img/samples/reddit/TopdeBotton.jpg" stringByExpandingTildeInPath];
+// edittheshittysunset
+//        NSString *file = [@"~/Documents/School 3/-Dissertation/6b. Image Processing And Analysis/img/samples/reddit/edittheshittysunset.jpg" stringByExpandingTildeInPath];
+//        NSString *file = [@"~/Documents/School 3/-Dissertation/6b. Image Processing And Analysis/img/samples/reddit/TopdeBotton.jpg" stringByExpandingTildeInPath];
 //        NSString *file = [@"~/Documents/School 3/-Dissertation/6b. Image Processing And Analysis/img/samples/reddit/cheekycow1.jpg" stringByExpandingTildeInPath];
-//        NSString *file = [@"~/Documents/School 3/-Dissertation/6b. Image Processing And Analysis/img/samples/reddit/buddhasminion.jpg" stringByExpandingTildeInPath];
+        NSString *file = [@"~/Documents/School 3/-Dissertation/6b. Image Processing And Analysis/img/samples/reddit/buddhasminion.jpg" stringByExpandingTildeInPath];
 //        NSString *file = [@"~/Documents/School 3/-Dissertation/6b. Image Processing And Analysis/img/samples/reddit/AlexDSSF.jpg" stringByExpandingTildeInPath];
         
         ip.image = [[NSImage alloc] initByReferencingFile:file];
@@ -32,15 +33,23 @@ int main(int argc, const char * argv[]) {
         NSBitmapImageRep *representation = [ip grayScaleRepresentationOfImage:ip.image];
 //        ip.pixels = [representation bitmapData];
 
-        NSBitmapImageRep *smoothed = [ip smoothWithSimpleAveragingFilterOfSize:9];
+//        NSBitmapImageRep *smoothed = [ip smoothWithSimpleAveragingFilterOfSize:3];
+        NSBitmapImageRep *smoothed = [ip smoothWithWeightedAveragingFilterOfSize:3];
 //        ip.pixels = [smoothed bitmapData];
         
         [ip cacheImageFromRepresentation:smoothed];
         
-//        [ip reduceNoiseWithMedianFilter];
-        NSBitmapImageRep *thresholded = [ip thresholdWithValue:128];
+        NSBitmapImageRep *median = [ip reduceNoiseWithMedianFilterOfSize:9];
+
+        NSBitmapImageRep *max = [ip reduceNoiseWithMaxFilterOfSize:11];
+        
+//        [ip cacheImageFromRepresentation:max];
+
+        NSBitmapImageRep *thresholded = [ip thresholdWithValue:50];
       
         // write file
+        [ip saveImageFileFromRepresentation:max fileName:@"max"];
+        [ip saveImageFileFromRepresentation:median fileName:@"median"];
         [ip saveImageFileFromRepresentation:thresholded fileName:@"thresholded"];
         [ip saveImageFileFromRepresentation:smoothed fileName:@"smoothed"];
         [ip saveImageFileFromRepresentation:representation fileName:@"original"];
