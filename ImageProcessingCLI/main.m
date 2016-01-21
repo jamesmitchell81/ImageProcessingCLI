@@ -38,14 +38,24 @@ int main(int argc, const char * argv[]) {
 //        ip.pixels = [smoothed bitmapData];
         
         [ip cacheImageFromRepresentation:smoothed];
-        
+         
         NSBitmapImageRep *median = [ip reduceNoiseWithMedianFilterOfSize:9];
 
         NSBitmapImageRep *max = [ip reduceNoiseWithMaxFilterOfSize:11];
+
         
-//        [ip cacheImageFromRepresentation:max];
+        NSBitmapImageRep *smallrepresentation = [ip croppedRepresentationOfImage:ip.image fromPoint:NSMakePoint(30.0, 250.0) toPoint:NSMakePoint(630.0, 450.0)];
+        
+        [ip cacheImageFromRepresentation:smallrepresentation];
 
         NSBitmapImageRep *thresholded = [ip thresholdWithValue:50];
+        
+        
+        // crop image.
+
+        
+
+        
       
         // write file
         [ip saveImageFileFromRepresentation:max fileName:@"max"];
@@ -53,6 +63,7 @@ int main(int argc, const char * argv[]) {
         [ip saveImageFileFromRepresentation:thresholded fileName:@"thresholded"];
         [ip saveImageFileFromRepresentation:smoothed fileName:@"smoothed"];
         [ip saveImageFileFromRepresentation:representation fileName:@"original"];
+        [ip saveImageFileFromRepresentation:smallrepresentation fileName:@"small"];
         
     }
     return 0;
