@@ -274,6 +274,45 @@
     return output;
 }
 
+- (NSBitmapImageRep *) croppedRepresentationOfImage:(NSImage *)image
+                                          fromPoint:(NSPoint)from
+                                            toPoint:(NSPoint)to
+{
+    
+    int width = (int)(to.x - from.x);
+    int height = (int)(to.y - from.y);
+    
+    float scale = (float)self.width / width;
+    
+    int newWidth = width * scale;
+    int newHeight = height * scale;
+    
+    int newX = from.x - (from.x * scale);
+//    int newY = from.y; // - (from.y * scale);
+    
+    NSLog(@"width:%d height:%d newwidth:%d newheight:%d scale:%f self.width:%d self.height:%d newY:%f newX:%d", width, height, newWidth, newHeight, scale, self.width, self.height, from.y, newX);
+    
+    NSBitmapImageRep *representation = [[NSBitmapImageRep alloc]
+                                        initWithBitmapDataPlanes: NULL
+                                        pixelsWide: newWidth
+                                        pixelsHigh: newHeight
+                                        bitsPerSample: 8
+                                        samplesPerPixel: 1
+                                        hasAlpha: NO
+                                        isPlanar: NO
+                                        colorSpaceName: NSCalibratedWhiteColorSpace
+                                        bytesPerRow: newWidth
+                                        bitsPerPixel: 8];
+
+    NSGraphicsContext *context = [NSGraphicsContext graphicsContextWithBitmapImageRep:representation];
+    [NSGraphicsContext saveGraphicsState];
+    [NSGraphicsContext setCurrentContext:context];
+        [image drawInRect:NSMakeRect(0, 0, newWidth, newHeight) fromRect:NSMakeRect(from.x, from.y, width, height) operation:NSCompositeCopy fraction:1.0];
+    [context flushGraphics];
+    [NSGraphicsContext restoreGraphicsState];
+    return representation;
+}
+
 
 - (NSBitmapImageRep *) grayScaleRepresentationOfImage:(NSImage *)image
 {
@@ -324,8 +363,10 @@
 
 - (void) cacheImageFromRepresentation:(NSBitmapImageRep *)representation
 {
-
-    NSData *newData = [representation representationUsingType:NSPNGFileType properties:Nil];
+    NSDictionary *imageProps = [NSDictionary dictionaryWithObject:[NSNumber numberWithFloat:1.0]
+                                                           forKey:NSImageCompressionFactor];
+    
+    NSData *newData = [representation representationUsingType:NSPNGFileType properties:imageProps];
     self.image = [[NSImage alloc] initWithData:newData];
 }
 

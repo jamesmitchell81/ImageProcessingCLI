@@ -32,6 +32,10 @@
 
 - (void) cacheImageFromRepresentation:(NSBitmapImageRep *)representation;
 
+- (NSBitmapImageRep *) croppedRepresentationOfImage:(NSImage *)image
+                                          fromPoint:(NSPoint)from
+                                            toPoint:(NSPoint)to;
+
 - (NSBitmapImageRep *) grayScaleRepresentationOfImage:(NSImage *)image;
 
 - (void) saveImageFileFromRepresentation:(NSBitmapImageRep *)representation
