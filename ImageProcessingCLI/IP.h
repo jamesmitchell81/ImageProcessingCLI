@@ -22,6 +22,9 @@
 - (int) maxFromArray:(int [])arr ofSize:(int)size;
 - (int) minFromArray:(int [])arr ofSize:(int)size;
 
+
+- (NSBitmapImageRep *) simpleThinned;//:(int)size;
+
 - (NSBitmapImageRep *) reduceNoiseWithMedianFilterOfSize:(int)size;
 - (NSBitmapImageRep *) reduceNoiseWithMaxFilterOfSize:(int)size;
 - (NSBitmapImageRep *) smoothWithSimpleAveragingFilterOfSize:(int)size;
@@ -31,10 +34,6 @@
 - (NSBitmapImageRep *) thresholdWithValue:(int)value;
 
 - (void) cacheImageFromRepresentation:(NSBitmapImageRep *)representation;
-
-- (NSBitmapImageRep *) croppedRepresentationOfImage:(NSImage *)image
-                                          fromPoint:(NSPoint)from
-                                            toPoint:(NSPoint)to;
 
 - (NSBitmapImageRep *) grayScaleRepresentationOfImage:(NSImage *)image;
 

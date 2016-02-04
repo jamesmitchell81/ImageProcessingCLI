@@ -21,8 +21,10 @@ int main(int argc, const char * argv[]) {
 //        NSString *file = [@"~/Documents/School 3/-Dissertation/6b. Image Processing And Analysis/img/samples/reddit/edittheshittysunset.jpg" stringByExpandingTildeInPath];
 //        NSString *file = [@"~/Documents/School 3/-Dissertation/6b. Image Processing And Analysis/img/samples/reddit/TopdeBotton.jpg" stringByExpandingTildeInPath];
 //        NSString *file = [@"~/Documents/School 3/-Dissertation/6b. Image Processing And Analysis/img/samples/reddit/cheekycow1.jpg" stringByExpandingTildeInPath];
-        NSString *file = [@"~/Documents/School 3/-Dissertation/6b. Image Processing And Analysis/img/samples/reddit/buddhasminion.jpg" stringByExpandingTildeInPath];
+//        NSString *file = [@"~/Documents/School 3/-Dissertation/6b. Image Processing And Analysis/img/samples/reddit/buddhasminion.jpg" stringByExpandingTildeInPath];
 //        NSString *file = [@"~/Documents/School 3/-Dissertation/6b. Image Processing And Analysis/img/samples/reddit/AlexDSSF.jpg" stringByExpandingTildeInPath];
+        
+        NSString *file = [@"~/Desktop/Cropped.png" stringByExpandingTildeInPath];
         
         ip.image = [[NSImage alloc] initByReferencingFile:file];
 
@@ -41,16 +43,15 @@ int main(int argc, const char * argv[]) {
          
         NSBitmapImageRep *median = [ip reduceNoiseWithMedianFilterOfSize:9];
 
-        NSBitmapImageRep *max = [ip reduceNoiseWithMaxFilterOfSize:11];
+//        NSBitmapImageRep *max = [ip reduceNoiseWithMaxFilterOfSize:11];
 
         
-        NSBitmapImageRep *smallrepresentation = [ip croppedRepresentationOfImage:ip.image fromPoint:NSMakePoint(30.0, 250.0) toPoint:NSMakePoint(630.0, 450.0)];
+//        NSBitmapImageRep *smallrepresentation = [ip croppedRepresentationOfImage:ip.image fromPoint:NSMakePoint(30.0, 200.0) toPoint:NSMakePoint(630.0, 500.0)];
         
-        [ip cacheImageFromRepresentation:smallrepresentation];
+//        [ip cacheImageFromRepresentation:smallrepresentation];
 
         NSBitmapImageRep *thresholded = [ip thresholdWithValue:50];
-        
-        
+       
         // crop image.
 
         
@@ -58,12 +59,14 @@ int main(int argc, const char * argv[]) {
         
       
         // write file
-        [ip saveImageFileFromRepresentation:max fileName:@"max"];
+//        [ip saveImageFileFromRepresentation:max fileName:@"max"];
         [ip saveImageFileFromRepresentation:median fileName:@"median"];
+        
         [ip saveImageFileFromRepresentation:thresholded fileName:@"thresholded"];
+        
         [ip saveImageFileFromRepresentation:smoothed fileName:@"smoothed"];
         [ip saveImageFileFromRepresentation:representation fileName:@"original"];
-        [ip saveImageFileFromRepresentation:smallrepresentation fileName:@"small"];
+//        [ip saveImageFileFromRepresentation:smallrepresentation fileName:@"small"];
         
     }
     return 0;

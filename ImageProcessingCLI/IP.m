@@ -10,6 +10,58 @@
 
 @implementation IP
 
+#pragma mark -
+#pragma mark Morph
+
+- (NSBitmapImageRep *) simpleThinned //:(int)size
+{
+    // create a represenation of the origional image
+    NSBitmapImageRep *representation = [self grayScaleRepresentationOfImage:self.image];
+    unsigned char *original = [representation bitmapData];
+    
+    // create a representation that will store the smoothed image.
+    NSBitmapImageRep *output = [self grayScaleRepresentationOfImage:self.image];
+    unsigned char *thinned = [output bitmapData];
+    
+    int size = 3;
+    int padding = (size - 1) / 2.0;
+    int structuringElement[3][3] = {
+        {0, 1, 0},
+        {1, 1, 1},
+        {0, 1, 0},
+    };
+    
+    for ( int y = padding; y < self.height - padding; y++ )
+    {
+        for (int x = padding; x < self.width - padding; x++)
+        {
+            
+            int centre = x + y * self.width;
+            int i = 0;
+            
+            for (int s = -padding; s < (padding + 1); s++) {
+                
+                for (int t = -padding; t < (padding + 1); t++) {
+                    
+                    int index = (x + s) + ((y + t) * self.width);
+                    
+//                    filter[i++] = original[index];
+                    
+                    
+                }
+            }
+            
+//            smoothed[centre] = [self getMedianFromArray:filter ofSize:size];
+        }
+    }
+    
+    return output;
+}
+
+
+#pragma mark -
+#pragma mark Filters
+
 - (NSBitmapImageRep *) reduceNoiseWithMedianFilterOfSize:(int)size
 {
     // create a represenation of the origional image
@@ -23,8 +75,10 @@
     int padding = (size - 1) / 2.0;
     int filter[size * size];
     
-    for ( int y = padding; y < self.height - padding; y++ ) {
-        for (int x = padding; x < self.width - padding; x++) {
+    for ( int y = padding; y < self.height - padding; y++ )
+    {
+        for (int x = padding; x < self.width - padding; x++)
+        {
             
             int centre = x + y * self.width;
             int i = 0;
@@ -59,15 +113,19 @@
     int padding = (size - 1) / 2.0;
     int filter[size * size];
     
-    for ( int y = padding; y < self.height - padding; y++ ) {
-        for (int x = padding; x < self.width - padding; x++) {
+    for ( int y = padding; y < self.height - padding; y++ )
+    {
+        for (int x = padding; x < self.width - padding; x++)
+        {
             
             int centre = x + y * self.width;
             int i = 0;
             
-            for (int s = -padding; s < (padding + 1); s++) {
+            for (int s = -padding; s < (padding + 1); s++)
+            {
                 
-                for (int t = -padding; t < (padding + 1); t++) {
+                for (int t = -padding; t < (padding + 1); t++)
+                {
                     
                     int index = (x + s) + ((y + t) * self.width);
                     filter[i++] = original[index];
@@ -98,16 +156,20 @@
     int padding = (size - 1) / 2.0;  // pad the image
     
     // iterate over each pixel of the image
-    for ( int y = padding; y < self.height - padding; y++ ) {
-        for (int x = padding; x < self.width - padding; x++) {
+    for ( int y = padding; y < self.height - padding; y++ )
+    {
+        for (int x = padding; x < self.width - padding; x++)
+        {
             
             // find the centre pixel.
             int centre = x + y * self.width;
             int val = 0;
             
             // iterate over the filter
-            for (int s = -padding; s < (padding + 1); s++) {
-                for (int t = -padding; t < (padding + 1); t++) {
+            for (int s = -padding; s < (padding + 1); s++)
+            {
+                for (int t = -padding; t < (padding + 1); t++)
+                {
                     
                     // offset the current x, y
                     int index = (x + s) + ((y + t) * self.width);
@@ -149,10 +211,11 @@
         filter[i] = (float)weights[i] / 16.0;
     }
     
-    
     // iterate over each pixel of the image
-    for ( int y = padding; y < self.height - padding; y++ ) {
-        for (int x = padding; x < self.width - padding; x++) {
+    for ( int y = padding; y < self.height - padding; y++ )
+    {
+        for (int x = padding; x < self.width - padding; x++)
+        {
             
             // find the centre pixel.
             int centre = x + y * self.width;
@@ -160,8 +223,10 @@
             int i = 0;
             
             // iterate over the filter
-            for (int s = -padding; s < (padding + 1); s++) {
-                for (int t = -padding; t < (padding + 1); t++) {
+            for (int s = -padding; s < (padding + 1); s++)
+            {
+                for (int t = -padding; t < (padding + 1); t++)
+                {
                     
                     // offset the current x, y
                     int index = (x + s) + ((y + t) * self.width);
@@ -181,6 +246,54 @@
     return output;
 }
 
+- (NSImage *) reduceNoiseWithCIMedianFilterOnImage:(NSImage *)image
+{
+    
+    CIFilter *filter = [CIFilter filterWithName:@"CINoiseReduction"];
+    
+    [filter setValue:[NSNumber numberWithFloat:0.10] forKey:@"inputNoiseLevel"];
+    
+    // http://stackoverflow.com/questions/10764249/get-nsimage-from-cifilter-ciradialgradient
+    [image lockFocus];
+    [[filter valueForKey:@"inputImage"]
+     drawAtPoint: NSZeroPoint
+     fromRect: NSMakeRect(0, 0, self.width, self.height)
+     operation:NSCompositeDestinationAtop  fraction:1.0
+     ];
+    [image unlockFocus];
+    
+    return image;
+}
+
+#pragma mark -
+#pragma mark Thresholding
+
+- (NSBitmapImageRep *) thresholdWithValue:(int)value
+{
+    
+    NSBitmapImageRep *output = [self grayScaleRepresentationOfImage:self.image];
+    unsigned char *threshold = [output bitmapData];
+    
+    
+    for ( int y = 0; y < self.height; y++ )
+    {
+        for ( int x = 0; x < self.width; x++ )
+        {
+            int index = x + (y * self.width);
+            if ( threshold[index] < value)
+            {
+                threshold[index] = 0;
+            } else {
+                threshold[index] = 255;
+            }
+        }
+    }
+    
+    return output;
+}
+
+#pragma mark -
+#pragma mark Sorting
 
 - (void) bubbleSort:(int *)arr ofSize:(int)size
 {
@@ -202,8 +315,6 @@
             }
         }
     } while (swap);
-    
-    
 }
 
 - (int) maxFromArray:(int [])arr ofSize:(int)size
@@ -227,92 +338,8 @@
     return arr[middle];
 }
 
-- (NSImage *) reduceNoiseWithCIMedianFilterOnImage:(NSImage *)image
-{
-    
-    CIFilter *filter = [CIFilter filterWithName:@"CINoiseReduction"];
-    
-    [filter setValue:[NSNumber numberWithFloat:0.10] forKey:@"inputNoiseLevel"];
-    
-     // http://stackoverflow.com/questions/10764249/get-nsimage-from-cifilter-ciradialgradient
-    [image lockFocus];
-    [[filter valueForKey:@"inputImage"]
-     drawAtPoint: NSZeroPoint
-     fromRect: NSMakeRect(0, 0, self.width, self.height)
-     operation:NSCompositeDestinationAtop  fraction:1.0
-     ];
-    [image unlockFocus];
-    
-    return image;
-}
-
-/*
- * 
- *
- *
- */
-- (NSBitmapImageRep *) thresholdWithValue:(int)value
-{
-    
-    NSBitmapImageRep *output = [self grayScaleRepresentationOfImage:self.image];
-    unsigned char *threshold = [output bitmapData];
-    
-    
-    for ( int y = 0; y < self.height; y++ )
-    {
-        for ( int x = 0; x < self.width; x++ )
-        {
-            int index = x + (y * self.width);
-            if ( threshold[index] < value) {
-                threshold[index] = 0;
-            } else {
-                threshold[index] = 255;
-            }
-        }
-    }
-    
-    return output;
-}
-
-- (NSBitmapImageRep *) croppedRepresentationOfImage:(NSImage *)image
-                                          fromPoint:(NSPoint)from
-                                            toPoint:(NSPoint)to
-{
-    
-    int width = (int)(to.x - from.x);
-    int height = (int)(to.y - from.y);
-    
-    float scale = (float)self.width / width;
-    
-    int newWidth = width * scale;
-    int newHeight = height * scale;
-    
-    int newX = from.x - (from.x * scale);
-//    int newY = from.y; // - (from.y * scale);
-    
-    NSLog(@"width:%d height:%d newwidth:%d newheight:%d scale:%f self.width:%d self.height:%d newY:%f newX:%d", width, height, newWidth, newHeight, scale, self.width, self.height, from.y, newX);
-    
-    NSBitmapImageRep *representation = [[NSBitmapImageRep alloc]
-                                        initWithBitmapDataPlanes: NULL
-                                        pixelsWide: newWidth
-                                        pixelsHigh: newHeight
-                                        bitsPerSample: 8
-                                        samplesPerPixel: 1
-                                        hasAlpha: NO
-                                        isPlanar: NO
-                                        colorSpaceName: NSCalibratedWhiteColorSpace
-                                        bytesPerRow: newWidth
-                                        bitsPerPixel: 8];
-
-    NSGraphicsContext *context = [NSGraphicsContext graphicsContextWithBitmapImageRep:representation];
-    [NSGraphicsContext saveGraphicsState];
-    [NSGraphicsContext setCurrentContext:context];
-        [image drawInRect:NSMakeRect(0, 0, newWidth, newHeight) fromRect:NSMakeRect(from.x, from.y, width, height) operation:NSCompositeCopy fraction:1.0];
-    [context flushGraphics];
-    [NSGraphicsContext restoreGraphicsState];
-    return representation;
-}
-
+#pragma mark -
+#pragma mark Representations
 
 - (NSBitmapImageRep *) grayScaleRepresentationOfImage:(NSImage *)image
 {
@@ -336,7 +363,6 @@
     [NSGraphicsContext restoreGraphicsState];
     return representation;
 }
-
 
 /*
  * Saves image to disk for my inspection.
