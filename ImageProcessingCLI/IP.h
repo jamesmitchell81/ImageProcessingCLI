@@ -10,34 +10,18 @@
 @import AppKit;
 @import CoreImage;
 
+//@class IntArrayUtil;
+
+
 @interface IP : NSObject
 
-@property NSImage *image;
-@property int width;
-@property int height;
-@property unsigned char *pixels;
+- (NSBitmapImageRep*) medianFilterOfSize:(int)size onImage:(NSImage*)image;
+- (NSBitmapImageRep*) maxFilterOfSize:(int)size onImage:(NSImage*)image;
+- (NSBitmapImageRep*) simpleAveragingFilterOfSize:(int)size onImage:(NSImage*)image;
+- (NSBitmapImageRep*) weightedAveragingFilterOfSize:(int)size onImage:(NSImage*)image;
+- (NSBitmapImageRep*) threshold:(NSImage*)image atValue:(int)value;
+- (NSImage*) reduceNoiseWithCIMedianFilterOnImage:(NSImage *)image;
 
-- (void) bubbleSort:(int *)arr ofSize:(int)size;
-- (int) getMedianFromArray:(int [])arr ofSize:(int)size;
-- (int) maxFromArray:(int [])arr ofSize:(int)size;
-- (int) minFromArray:(int [])arr ofSize:(int)size;
-
-
-- (NSBitmapImageRep *) simpleThinned;//:(int)size;
-
-- (NSBitmapImageRep *) reduceNoiseWithMedianFilterOfSize:(int)size;
-- (NSBitmapImageRep *) reduceNoiseWithMaxFilterOfSize:(int)size;
-- (NSBitmapImageRep *) smoothWithSimpleAveragingFilterOfSize:(int)size;
-- (NSBitmapImageRep *) smoothWithWeightedAveragingFilterOfSize:(int)size;
-- (NSImage *) reduceNoiseWithCIMedianFilterOnImage:(NSImage *)image;
-
-- (NSBitmapImageRep *) thresholdWithValue:(int)value;
-
-- (void) cacheImageFromRepresentation:(NSBitmapImageRep *)representation;
-
-- (NSBitmapImageRep *) grayScaleRepresentationOfImage:(NSImage *)image;
-
-- (void) saveImageFileFromRepresentation:(NSBitmapImageRep *)representation
-                                fileName:(NSString*)filename;
+- (NSBitmapImageRep*) imageDifferenceOf:(NSImage*)image1 and:(NSImage*)image2;
 
 @end
