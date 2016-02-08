@@ -48,12 +48,16 @@ int main(int argc, const char * argv[]) {
         NSBitmapImageRep* dilate = [morph simpleDilationOfImage:newImage];
         NSBitmapImageRep* erode = [morph simpleErosionOfImage:newImage];
         
-        newImage = [ImageRepresentation cacheImageFromRepresentation:dilate];
-        
-        NSBitmapImageRep* difference = [ip imageDifferenceOf:image and:newImage];
+        newImage = [ImageRepresentation cacheImageFromRepresentation:erode];
+
+        NSBitmapImageRep* difference = [ip imageDifferenceOf:newImage and:image];
+//        NSBitmapImageRep* difference = [ip imageDifferenceOf:image and:newImage];
         
         NSBitmapImageRep* opened = [morph opening:image];
         NSBitmapImageRep* closed = [morph closing:image];
+        
+        NSImage* imageToThin = [ImageRepresentation cacheImageFromRepresentation:thresholded];
+        NSBitmapImageRep* thin = [morph simpleThinning:imageToThin];
 
 
         // write file
@@ -68,6 +72,8 @@ int main(int argc, const char * argv[]) {
         
         [ImageRepresentation saveImageFileFromRepresentation:opened fileName:@"opened"];
         [ImageRepresentation saveImageFileFromRepresentation:closed fileName:@"closed"];
+        
+        [ImageRepresentation saveImageFileFromRepresentation:thin fileName:@"thinned"];
         
     }
     return 0;
