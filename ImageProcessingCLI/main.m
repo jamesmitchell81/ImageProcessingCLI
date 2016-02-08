@@ -10,6 +10,7 @@
 #import "IP.h"
 #import "ImageRepresentation.h"
 #import "Morphology.h"
+#import "Thinning.h"
 
 @import AppKit;
 
@@ -27,7 +28,8 @@ int main(int argc, const char * argv[]) {
 //        NSString *file = [@"~/Documents/School 3/-Dissertation/6b. Image Processing And Analysis/img/samples/reddit/buddhasminion.jpg" stringByExpandingTildeInPath];
 //        NSString *file = [@"~/Documents/School 3/-Dissertation/6b. Image Processing And Analysis/img/samples/reddit/AlexDSSF.jpg" stringByExpandingTildeInPath];
         
-        NSString* file = [@"~/Desktop/Cropped.png" stringByExpandingTildeInPath];
+//        NSString* file = [@"~/Desktop/Cropped.png" stringByExpandingTildeInPath];
+        NSString* file = [@"~/Desktop/letterset.png" stringByExpandingTildeInPath];
         NSImage* image = [[NSImage alloc] initByReferencingFile:file];
         
 //        image = [ip reduceNoiseWithCIMedianFilterOnImage:image];
@@ -57,8 +59,9 @@ int main(int argc, const char * argv[]) {
         NSBitmapImageRep* closed = [morph closing:image];
         
         NSImage* imageToThin = [ImageRepresentation cacheImageFromRepresentation:thresholded];
-        NSBitmapImageRep* thin = [morph simpleThinning:imageToThin];
-
+        
+        Thinning* thinning = [Thinning alloc];
+        NSBitmapImageRep* thin = [thinning thinImage:imageToThin];
 
         // write file
         [ImageRepresentation saveImageFileFromRepresentation:max fileName:@"max"];
