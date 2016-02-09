@@ -1,15 +1,17 @@
 //
 //  Thinning.m
 //  ImageProcessingCLI
+//  Implementation of ZhangSuen Thinning Algorithm.
 //
 //  Created by James Mitchell on 08/02/2016.
 //  Copyright © 2016 James Mitchell. All rights reserved.
 //
 
-#import "Thinning.h"
+
+#import "ZhangSuenThin.h"
 #import "ImageRepresentation.h"
 
-@implementation Thinning
+@implementation ZhangSuenThin
 
 
 - (NSBitmapImageRep*) thinImage:(NSImage*)image

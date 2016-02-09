@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 @import AppKit;
 
-@interface Thinning : NSObject
+@interface ZhangSuenThin : NSObject
 {
     int width;
     int height;

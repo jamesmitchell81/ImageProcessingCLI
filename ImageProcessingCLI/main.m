@@ -10,7 +10,7 @@
 #import "IP.h"
 #import "ImageRepresentation.h"
 #import "Morphology.h"
-#import "Thinning.h"
+#import "ZhangSuenThin.h"
 
 @import AppKit;
 
@@ -60,7 +60,7 @@ int main(int argc, const char * argv[]) {
         
         NSImage* imageToThin = [ImageRepresentation cacheImageFromRepresentation:thresholded];
         
-        Thinning* thinning = [Thinning alloc];
+        ZhangSuenThin* thinning = [ZhangSuenThin alloc];
         NSBitmapImageRep* thin = [thinning thinImage:imageToThin];
 
         // write file
