@@ -18,6 +18,8 @@
 + (NSBitmapImageRep*) grayScaleRepresentationOfImage:(NSImage *)image
                                          withPadding:(int)padding;
 
++ (NSBitmapImageRep*) histogramRepresentationOfData:(int*)data withWidth:(int)width andHeight:(int)height;
+
 + (void) saveImageFileFromRepresentation:(NSBitmapImageRep *)representation
                                 fileName:(NSString*)filename;
 
