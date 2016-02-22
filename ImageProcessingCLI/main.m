@@ -7,10 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
+
+#import "IntArrayUtil.h"
 #import "IP.h"
 #import "ImageRepresentation.h"
 #import "Morphology.h"
 #import "ZhangSuenThin.h"
+#import "ImageAnalysis.h"
 
 @import AppKit;
 
@@ -28,8 +31,8 @@ int main(int argc, const char * argv[]) {
 //        NSString *file = [@"~/Documents/School 3/-Dissertation/6b. Image Processing And Analysis/img/samples/reddit/buddhasminion.jpg" stringByExpandingTildeInPath];
 //        NSString *file = [@"~/Documents/School 3/-Dissertation/6b. Image Processing And Analysis/img/samples/reddit/AlexDSSF.jpg" stringByExpandingTildeInPath];
         
-//        NSString* file = [@"~/Desktop/Cropped.png" stringByExpandingTildeInPath];
-        NSString* file = [@"~/Desktop/letterset.png" stringByExpandingTildeInPath];
+        NSString* file = [@"~/Desktop/Cropped.png" stringByExpandingTildeInPath];
+//        NSString* file = [@"~/Desktop/letterset.png" stringByExpandingTildeInPath];
         NSImage* image = [[NSImage alloc] initByReferencingFile:file];
         
 //        image = [ip reduceNoiseWithCIMedianFilterOnImage:image];
@@ -42,26 +45,63 @@ int main(int argc, const char * argv[]) {
         
         NSBitmapImageRep* median =      [ip medianFilterOfSize:5 onImage:image];
         NSBitmapImageRep* max =         [ip maxFilterOfSize:9 onImage:image];
-        NSBitmapImageRep* thresholded = [ip threshold:image atValue:50];
+        NSBitmapImageRep* thresholded = [ip threshold:image atValue:128];
         
         image = [ImageRepresentation cacheImageFromRepresentation:thresholded];
+        
+        
+        
+        
+        
         NSImage* newImage = [ImageRepresentation cacheImageFromRepresentation:thresholded];
         
         NSBitmapImageRep* dilate = [morph simpleDilationOfImage:newImage];
         NSBitmapImageRep* erode = [morph simpleErosionOfImage:newImage];
+        NSImage* dilated = [ImageRepresentation cacheImageFromRepresentation:dilate];
         
-        newImage = [ImageRepresentation cacheImageFromRepresentation:erode];
-
-        NSBitmapImageRep* difference = [ip imageDifferenceOf:newImage and:image];
-//        NSBitmapImageRep* difference = [ip imageDifferenceOf:image and:newImage];
+        NSBitmapImageRep* difference = [ip imageDifferenceOf:image and:dilated];
+        NSImage* negative = [ImageRepresentation cacheImageFromRepresentation:difference];
         
+        NSBitmapImageRep* negated = [ip imageNegativeOf:negative];
         NSBitmapImageRep* opened = [morph opening:image];
         NSBitmapImageRep* closed = [morph closing:image];
         
         NSImage* imageToThin = [ImageRepresentation cacheImageFromRepresentation:thresholded];
+//        NSImage* imageToThin = [ImageRepresentation cacheImageFromRepresentation:negated];
         
         ZhangSuenThin* thinning = [ZhangSuenThin alloc];
         NSBitmapImageRep* thin = [thinning thinImage:imageToThin];
+        
+//        NSImage* thinnedImage = [ImageRepresentation cacheImageFromRepresentation:thin];
+        NSImage* thinnedImage = [ImageRepresentation cacheImageFromRepresentation:thresholded];
+        
+        int height = thinnedImage.size.height;
+        
+        ImageAnalysis* ia = [ImageAnalysis alloc];
+        int* areaDensity = [ia pixelAreaDensityOfImage:thinnedImage];
+
+        int maxDensity = [IntArrayUtil maxFromArray:areaDensity ofSize:height];
+        
+        
+        NSBitmapImageRep* areaDensityHistogramRep = [ImageRepresentation histogramRepresentationOfData:areaDensity
+                                                                                             withWidth:maxDensity
+                                                                                             andHeight:height];
+        
+        
+        NSImage* imageForContrast = [[NSImage alloc] initByReferencingFile:file];
+        int* contrast = [ip contrastHistogramOfImage:imageForContrast];
+        
+        int maxValue = [IntArrayUtil maxFromArray:contrast ofSize:256];
+        
+        NSLog(@"max: %d", maxValue);
+        
+        NSBitmapImageRep* contrastHistogram = [ImageRepresentation histogramRepresentationOfData:contrast
+                                                                                       withWidth:maxValue
+                                                                                       andHeight:256];
+
+        [ImageRepresentation saveImageFileFromRepresentation:contrastHistogram fileName:@"contrast"];
+        
+        [ImageRepresentation saveImageFileFromRepresentation:areaDensityHistogramRep fileName:@"areaDensity"];
 
         // write file
         [ImageRepresentation saveImageFileFromRepresentation:max fileName:@"max"];
@@ -75,13 +115,28 @@ int main(int argc, const char * argv[]) {
         
         [ImageRepresentation saveImageFileFromRepresentation:opened fileName:@"opened"];
         [ImageRepresentation saveImageFileFromRepresentation:closed fileName:@"closed"];
-        
         [ImageRepresentation saveImageFileFromRepresentation:thin fileName:@"thinned"];
         
+        [ImageRepresentation saveImageFileFromRepresentation:negated fileName:@"negated"];
     }
     return 0;
 }
 
+
+void filters(NSImage* image)
+{
+    
+}
+
+void morph(NSImage* image)
+{
+    
+}
+
+void thin(NSImage* image)
+{
+    
+}
 
 
 

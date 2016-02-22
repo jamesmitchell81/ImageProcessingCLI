@@ -254,6 +254,38 @@
 }
 
 
+- (int*) contrastHistogramOfImage:(NSImage*)image
+{
+    int range = 255;
+    int* output = [IntArrayUtil zeroArrayOfSize:range];
+    
+    int width = image.size.width;
+    int height = image.size.height;
+    
+    NSBitmapImageRep* representation = [ImageRepresentation grayScaleRepresentationOfImage:image];
+    unsigned char* data = [representation bitmapData];
+    
+    for ( int y = 0; y < height; y++ )
+    {
+        for ( int x = 0; x < width; x++ )
+        {
+            int index = x + (y * width);
+            
+            int val = data[index];
+            
+            output[val] += 1;
+        }
+        
+    }
+    
+    
+    return output;
+}
+
+
+#pragma mark -
+#pragma mark Other
+
 - (NSBitmapImageRep*) imageDifferenceOf:(NSImage*)image1 and:(NSImage*)image2
 {
     NSImage* outputImage = [[NSImage alloc] initWithSize:image1.size];
@@ -279,6 +311,37 @@
         }
     }
 
+    return output;
+}
+
+- (NSBitmapImageRep*) imageNegativeOf:(NSImage*)image
+{
+    NSBitmapImageRep* output = [ImageRepresentation grayScaleRepresentationOfImage:image];
+    
+    unsigned char* rep = [output bitmapData];
+    
+    int width = image.size.width;
+    int height = image.size.height;
+    
+    for ( int y = 0; y < height; y++ )
+    {
+        for ( int x = 0; x < width; x++ )
+        {
+            int index = x + (y * width);
+            
+            int val = rep[index] - 255;
+            
+            if ( val < 0 )
+            {
+                val = val * -1;
+            }
+            
+            rep[index] = val;
+        }
+    }
+    
+    
+    
     return output;
 }
 

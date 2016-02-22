@@ -8,6 +8,7 @@
 
 #import "Morphology.h"
 #import "ImageRepresentation.h"
+#import "StructuringElement.h"
 
 @implementation Morphology
 
@@ -40,32 +41,29 @@
 
 - (NSBitmapImageRep*) simpleDilationOfImage:(NSImage*)image
 {
-    return [self process:image withPolarity:1];
+    int elem[9] = {1, 1, 1, 1, 1, 1, 1, 1, 1};
+    return [self processImage:image withBackground:255 andForeground:0 andStructuringElement:elem];
 }
 
 
 - (NSBitmapImageRep*) simpleErosionOfImage:(NSImage*)image
 {
     //    int polarity = 0;
-    
-    return [self process:image withPolarity:0];
+    int elem[9] = {1, 1, 1, 1, 1, 1, 1, 1, 1};
+    return [self processImage:image withBackground:0 andForeground:255 andStructuringElement:elem];
 }
 
 
-- (NSBitmapImageRep*) process:(NSImage*)image withPolarity:(int)polarity
+- (NSBitmapImageRep*) processImage:(NSImage *)image
+                    withBackground:(int)background
+                     andForeground:(int)foreground
+             andStructuringElement:(int [])element
 {
-    // wrong names!
-    int background, foreground;
     
-    // dnot like this.
-    if ( polarity == 1 )
-    {
-        background = 255;
-        foreground = 0;
-    } else {
-        background = 0;
-        foreground = 255;
-    }
+//    StructuringElement *elem = [StructuringElement alloc];
+//    
+//    [elem addRow:1, 1,    1, nil];
+//    [elem addRow:1, NULL, 1, nil];
     
     NSBitmapImageRep* representation = [ImageRepresentation grayScaleRepresentationOfImage:image];
     unsigned char *original = [representation bitmapData];
@@ -110,30 +108,5 @@
     
     return output;
 }
-
-- (unsigned char*) toBinary:(unsigned char*)representation
-{
-    unsigned char* binary = malloc(strlen((const char*)representation));
-    unsigned long length = strlen((const char*)representation);
-    
-//    NSLog(@"%lu", strlen((const char*)binary));
-    
-    for (unsigned long i = 0; i < length; i++)
-    {
-        NSLog(@"%d", representation[i]);
-        
-        if ( representation[i] == 255 )
-        {
-            binary[i] = 0;
-        } else {
-            binary[i] = 1;
-        }
-
-    }
-
-    return binary;
-}
-
-
 
 @end

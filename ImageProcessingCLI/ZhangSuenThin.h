@@ -16,7 +16,6 @@
     
     BOOL done;
     
-    unsigned char* original;
     unsigned char* processed;
 //
 //    NSBitmapImageRep* representation;

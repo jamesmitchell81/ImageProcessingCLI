@@ -11,20 +11,19 @@
 
 @interface Morphology : NSObject
 
-- (unsigned char*) toBinary:(unsigned char*)representation;
-
 - (NSBitmapImageRep*) opening:(NSImage*)image;
 - (NSBitmapImageRep*) closing:(NSImage*)image;
 
-- (NSBitmapImageRep*) simpleDilationOfImage:(NSImage*)image;
-- (NSBitmapImageRep*) simpleErosionOfImage:(NSImage*)image;
+- (NSBitmapImageRep*) simpleDilationOfImage:(NSImage *)image;
+- (NSBitmapImageRep*) simpleErosionOfImage:(NSImage *)image;
 
-- (NSBitmapImageRep*) process:(NSImage*)image withPolarity:(int)polarity;
+- (NSBitmapImageRep*) processImage:(NSImage *)image
+                    withBackground:(int)background
+                     andForeground:(int)foreground
+             andStructuringElement:(int [])element;
 
-- (NSBitmapImageRep*) simpleThinning:(NSImage*)image;
 // dilate
 // erode
 // thin
-// skeletonise
 
 @end

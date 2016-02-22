@@ -19,9 +19,6 @@
     width = image.size.width;
     height = image.size.height;
     
-    NSBitmapImageRep* representation = [ImageRepresentation grayScaleRepresentationOfImage:image];
-    original = [representation bitmapData];
-    
     NSBitmapImageRep* output = [ImageRepresentation grayScaleRepresentationOfImage:image];
     processed = [output bitmapData];
     
@@ -36,20 +33,15 @@
         NSLog(@"%d", i++);
     }
     
-    
     return output;
 }
 
-
-- (void) subIteration1//:(unsigned char*)original new:(unsigned char*)processed
+- (void) subIteration1
 {
     
     done = YES;
     BOOL change = NO;
     
-//    int p = 0;
-//    int current[width * height];
-
     int size = 3;
     int padding = (size - 1) / 2.0;
     
@@ -64,7 +56,6 @@
             int a = 0;
             int b = 0;
             
-
             int p2 = (x - 1) + (y * width);
             int p3 = (x - 1) + ((y + 1) * width);
             int p4 = (x) + ((y + 1) * width);
@@ -83,7 +74,7 @@
             if ( processed[p7] == 0 ) b++;
             if ( processed[p8] == 0 ) b++;
             if ( processed[p9] == 0 ) b++;
-            BOOL deleteA = ( (b < 6) && (b > 2) );
+            BOOL deleteA = ( (b <= 6) && (b >= 2) );
 
             // b)
             if ( (processed[p2] == 255) && (processed[p3] == 0) ) a++;
@@ -114,14 +105,11 @@
 }
 
 
-- (void) subIteration2//:(unsigned char*)original new:(unsigned char*)processed
+- (void) subIteration2
 {
     done = YES;
     
     BOOL change = NO;
-    
-//    int p = 0;
-//    int current[width * height];
     
     int size = 3;
     int padding = (size - 1) / 2.0;
@@ -156,7 +144,7 @@
             if ( processed[p7] == 0 ) b++;
             if ( processed[p8] == 0 ) b++;
             if ( processed[p9] == 0 ) b++;
-            BOOL deleteA = ( (b < 6) && (b > 2) );
+            BOOL deleteA = ( (b <= 6) && (b >= 2) );
 
             // b) transitions between 0 -> 1 (white -> block)
             if ( (processed[p2] == 255) && (processed[p3] == 0) ) a++;
