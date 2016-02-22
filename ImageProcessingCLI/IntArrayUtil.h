@@ -14,5 +14,6 @@
 + (int) getMedianFromArray:(int [])arr ofSize:(int)size;
 + (int) maxFromArray:(int [])arr ofSize:(int)size;
 + (int) minFromArray:(int [])arr ofSize:(int)size;
++ (int*) zeroArrayOfSize:(int)size;
 
 @end

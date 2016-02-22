@@ -39,16 +39,46 @@
     } while (swap);
 }
 
+//+ (int) maxFromArray:(int [])arr ofSize:(int)size
+//{
+//    [self bubbleSort:arr ofSize:size];
+//    return arr[size];
+//}
+
 + (int) maxFromArray:(int [])arr ofSize:(int)size
 {
-    [self bubbleSort:arr ofSize:size];
-    return arr[size];
+    int max = 0;
+    for ( int i = 0; i < size; i++ )
+    {
+        int val = arr[i];
+        if ( val > max )
+        {
+            max = val;
+        }
+    }
+    
+    return max;
 }
+
+//+ (int) minFromArray:(int [])arr ofSize:(int)size
+//{
+//    [self bubbleSort:arr ofSize:size];
+//    return arr[0];
+//}
 
 + (int) minFromArray:(int [])arr ofSize:(int)size
 {
-    [self bubbleSort:arr ofSize:size];
-    return arr[0];
+    int min = 0;
+    for ( int i = 0; i < size; i++ )
+    {
+        int val = arr[i];
+        if ( val < min )
+        {
+            min = val;
+        }
+    }
+    
+    return min;
 }
 
 + (int) getMedianFromArray:(int [])arr ofSize:(int)size
@@ -58,6 +88,17 @@
     [self bubbleSort:arr ofSize:size];
     
     return arr[middle];
+}
+
++ (int*) zeroArrayOfSize:(int)size
+{
+    int* output = malloc(sizeof(int) * size);
+    
+    for ( int i = 0; i < size; i++ )
+    {
+        output[i] = 0;
+    }
+    return output;
 }
 
 @end
