@@ -253,10 +253,10 @@
     return output;
 }
 
-
+// as a percentage of the image pixels.
 - (int*) contrastHistogramOfImage:(NSImage*)image
 {
-    int range = 255;
+    int range = 256;
     int* output = [IntArrayUtil zeroArrayOfSize:range];
     
     int width = image.size.width;
@@ -270,18 +270,86 @@
         for ( int x = 0; x < width; x++ )
         {
             int index = x + (y * width);
-            
             int val = data[index];
             
             output[val] += 1;
         }
-        
     }
-    
     
     return output;
 }
 
+- (int*) normaliseConstrastHistogramData:(int*)data ofSize:(int)size
+{
+    int* output = [IntArrayUtil zeroArrayOfSize:size];
+    int count = 0;
+    
+    for ( int i = 0; i < size; i++ )
+    {
+        count += data[i];
+    }
+    
+    for ( int j = 0; j < size; j++ )
+    {
+        output[j] = ((float)data[j] / 10.0f);
+
+    }
+    
+    return output;
+}
+
+// constrast streching: http://homepages.inf.ed.ac.uk/rbf/HIPR2/stretch.htm
+// linear - Page 60 Princibles of Digital Image Processing.
+- (int*) automaticContrastAdjustmentOfImage:(NSImage*)image
+{
+    int range = 256;
+    
+    int* output  = [IntArrayUtil zeroArrayOfSize:range];
+    // create representation of image.
+    
+    // get the histogram values.
+    int* histogram = [self contrastHistogramOfImage:image];
+    
+    // get the high and low of the histogram.
+    int high = 255;
+    int low = 0;
+    
+    int i = 0;
+    while ( (histogram[i] == 0) && (i < range)) {
+        i++;
+    }
+    
+    low = i;
+    
+    i = 255;
+    while ( (histogram[i] == 0) && (i > 0) ) {
+        i--;
+    }
+    
+    high = i;
+    
+    // f(a) = (a - a[low]) * 255 / a[high] - a[low]
+    for ( int i = 0; i < range; i++ )
+    {
+        output[i] = (i - low) * (255 / (high - low));
+        NSLog(@"i: %d, n:%d", i, output[i]);
+    }
+
+    return output;
+}
+
+// Principle of DIP Fundermentals chap.3 p.52, chap.4 p.66
+- (int*) cumulativeHistogramFromData:(int*)data ofSize:(int)size
+{
+    int* output = [IntArrayUtil zeroArrayOfSize:size];
+    
+    for ( int i = 1; i < size; i++ )
+    {
+        output[i] = data[i - 1] + data[i];
+    }
+    
+    return output;
+}
 
 #pragma mark -
 #pragma mark Other

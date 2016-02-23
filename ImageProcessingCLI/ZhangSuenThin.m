@@ -30,7 +30,6 @@
     {
         [self subIteration1];
         [self subIteration2];
-        NSLog(@"%d", i++);
     }
     
     return output;

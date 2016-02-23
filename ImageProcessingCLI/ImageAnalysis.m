@@ -26,6 +26,8 @@
     int width = image.size.width;
     int height = image.size.height;
     
+//    NSLog(@"%d", width * height);
+    
     NSBitmapImageRep* representation = [ImageRepresentation grayScaleRepresentationOfImage:image];
     unsigned char* input = [representation bitmapData];
     

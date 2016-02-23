@@ -45,7 +45,7 @@ int main(int argc, const char * argv[]) {
         
         NSBitmapImageRep* median =      [ip medianFilterOfSize:5 onImage:image];
         NSBitmapImageRep* max =         [ip maxFilterOfSize:9 onImage:image];
-        NSBitmapImageRep* thresholded = [ip threshold:image atValue:128];
+        NSBitmapImageRep* thresholded = [ip threshold:image atValue:50];
         
         image = [ImageRepresentation cacheImageFromRepresentation:thresholded];
         
@@ -79,9 +79,7 @@ int main(int argc, const char * argv[]) {
         
         ImageAnalysis* ia = [ImageAnalysis alloc];
         int* areaDensity = [ia pixelAreaDensityOfImage:thinnedImage];
-
         int maxDensity = [IntArrayUtil maxFromArray:areaDensity ofSize:height];
-        
         
         NSBitmapImageRep* areaDensityHistogramRep = [ImageRepresentation histogramRepresentationOfData:areaDensity
                                                                                              withWidth:maxDensity
@@ -90,20 +88,31 @@ int main(int argc, const char * argv[]) {
         
         NSImage* imageForContrast = [[NSImage alloc] initByReferencingFile:file];
         int* contrast = [ip contrastHistogramOfImage:imageForContrast];
-        
+        contrast = [ip normaliseConstrastHistogramData:contrast ofSize:256];
         int maxValue = [IntArrayUtil maxFromArray:contrast ofSize:256];
         
-        NSLog(@"max: %d", maxValue);
         
         NSBitmapImageRep* contrastHistogram = [ImageRepresentation histogramRepresentationOfData:contrast
                                                                                        withWidth:maxValue
                                                                                        andHeight:256];
 
-        [ImageRepresentation saveImageFileFromRepresentation:contrastHistogram fileName:@"contrast"];
+        NSImage* imageAutoContrast = [[NSImage alloc] initByReferencingFile:file];
+        int* autoContrast = [ip automaticContrastAdjustmentOfImage:imageAutoContrast];
         
+//        imageAutoContrast = [ImageRepresentation cacheImageFromRepresentation:autoContrast];
+//        int* autoContrastHistogram = [ip contrastHistogramOfImage:imageAutoContrast];
+//        autoContrastHistogram = [ip normaliseConstrastHistogramData:autoContrastHistogram ofSize:256];
+//        
+//        NSBitmapImageRep* autoContrastHistogramRep = [ImageRepresentation histogramRepresentationOfData:autoContrastHistogram
+//                                                                                              withWidth:[IntArrayUtil maxFromArray:autoContrastHistogram ofSize:256]
+//                                                                                              andHeight:256];
+//        
+//        [ImageRepresentation saveImageFileFromRepresentation:autoContrast fileName:@"AutoContrasted"];
+//        [ImageRepresentation saveImageFileFromRepresentation:autoContrastHistogramRep fileName:@"AutoContrastedHistogram"];
+        
+        
+        [ImageRepresentation saveImageFileFromRepresentation:contrastHistogram fileName:@"contrast"];
         [ImageRepresentation saveImageFileFromRepresentation:areaDensityHistogramRep fileName:@"areaDensity"];
-
-        // write file
         [ImageRepresentation saveImageFileFromRepresentation:max fileName:@"max"];
         [ImageRepresentation saveImageFileFromRepresentation:median fileName:@"median"];
         [ImageRepresentation saveImageFileFromRepresentation:thresholded fileName:@"thresholded"];
@@ -112,11 +121,9 @@ int main(int argc, const char * argv[]) {
         [ImageRepresentation saveImageFileFromRepresentation:dilate fileName:@"dilated"];
         [ImageRepresentation saveImageFileFromRepresentation:erode fileName:@"eroded"];
         [ImageRepresentation saveImageFileFromRepresentation:difference fileName:@"difference"];
-        
         [ImageRepresentation saveImageFileFromRepresentation:opened fileName:@"opened"];
         [ImageRepresentation saveImageFileFromRepresentation:closed fileName:@"closed"];
         [ImageRepresentation saveImageFileFromRepresentation:thin fileName:@"thinned"];
-        
         [ImageRepresentation saveImageFileFromRepresentation:negated fileName:@"negated"];
     }
     return 0;

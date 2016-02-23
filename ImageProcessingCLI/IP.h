@@ -24,6 +24,9 @@
 
 - (NSBitmapImageRep*) threshold:(NSImage*)image atValue:(int)value;
 - (int*) contrastHistogramOfImage:(NSImage*)image;
+- (int*) normaliseConstrastHistogramData:(int*)data ofSize:(int)size;
+- (int*) automaticContrastAdjustmentOfImage:(NSImage*)image;
+- (int*) cumulativeHistogramFromData:(int*)data ofSize:(int)size;
 
 - (NSBitmapImageRep*) imageDifferenceOf:(NSImage*)image1 and:(NSImage*)image2;
 
