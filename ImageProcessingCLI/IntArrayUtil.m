@@ -39,15 +39,9 @@
     } while (swap);
 }
 
-//+ (int) maxFromArray:(int [])arr ofSize:(int)size
-//{
-//    [self bubbleSort:arr ofSize:size];
-//    return arr[size];
-//}
-
 + (int) maxFromArray:(int [])arr ofSize:(int)size
 {
-    int max = 0;
+    int max = arr[0];
     for ( int i = 0; i < size; i++ )
     {
         int val = arr[i];
@@ -60,15 +54,9 @@
     return max;
 }
 
-//+ (int) minFromArray:(int [])arr ofSize:(int)size
-//{
-//    [self bubbleSort:arr ofSize:size];
-//    return arr[0];
-//}
-
 + (int) minFromArray:(int [])arr ofSize:(int)size
 {
-    int min = 0;
+    int min = arr[0];
     for ( int i = 0; i < size; i++ )
     {
         int val = arr[i];
