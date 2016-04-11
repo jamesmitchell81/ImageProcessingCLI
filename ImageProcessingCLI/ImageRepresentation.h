@@ -10,16 +10,27 @@
 @import AppKit;
 
 @interface ImageRepresentation : NSObject
+{
+    NSImage* original;
+    NSImage* current;
+    NSImage* subject;
+    NSImage* filtered;
+}
+
+@property (nonatomic) NSImage* original;
+@property (nonatomic) NSImage* current;
+@property (nonatomic) NSImage* subject;
+@property (nonatomic) NSImage* filtered;
+
+
+- (void) resetSubject;
 
 // representation.
 + (NSImage*) cacheImageFromRepresentation:(NSBitmapImageRep *)representation;
-
 + (NSBitmapImageRep*) grayScaleRepresentationOfImage:(NSImage *)image;
 + (NSBitmapImageRep*) grayScaleRepresentationOfImage:(NSImage *)image
                                          withPadding:(int)padding;
-
 + (NSBitmapImageRep*) histogramRepresentationOfData:(int*)data withWidth:(int)width andHeight:(int)height;
-
 + (void) saveImageFileFromRepresentation:(NSBitmapImageRep *)representation
                                 fileName:(NSString*)filename;
 

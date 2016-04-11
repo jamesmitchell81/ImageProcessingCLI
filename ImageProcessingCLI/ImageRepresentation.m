@@ -10,6 +10,35 @@
 
 @implementation ImageRepresentation
 
+@synthesize subject;
+@synthesize original;
+@synthesize filtered;
+@synthesize current;
+
+- (void) setOriginal:(NSImage *)image
+{
+    original = [[NSImage alloc] init];
+    [original addRepresentation:[ImageRepresentation grayScaleRepresentationOfImage:image]];
+}
+
+- (void) setCurrent:(NSImage *)image
+{
+    current = [[NSImage alloc] init];
+    [current addRepresentation:[ImageRepresentation grayScaleRepresentationOfImage:image]];
+}
+
+- (void) setSubject:(NSImage*)image
+{
+    subject = [[NSImage alloc] init];
+    [subject addRepresentation:[ImageRepresentation grayScaleRepresentationOfImage:image]];
+}
+
+- (void) resetSubject
+{
+    subject = [[NSImage alloc] init];
+    [subject addRepresentation:[ImageRepresentation grayScaleRepresentationOfImage:original]];
+}
+
 + (NSBitmapImageRep *) grayScaleRepresentationOfImage:(NSImage *)image
 {
     return [self grayScaleRepresentationOfImage:image withPadding:0];
@@ -33,7 +62,13 @@
     NSGraphicsContext *context = [NSGraphicsContext graphicsContextWithBitmapImageRep:representation];
     [NSGraphicsContext saveGraphicsState];
     [NSGraphicsContext setCurrentContext:context];
-        [image drawAtPoint:NSZeroPoint fromRect:NSZeroRect operation:NSCompositeCopy fraction:1.0];
+    
+    // REFERENCE developer.apple.com/library/mac/documentation/Cocoa/Conceptual/CocoaDrawingGuide/Images/Images.html
+        [image drawAtPoint:NSZeroPoint
+                  fromRect:NSZeroRect
+                 operation:NSCompositeCopy
+                  fraction:1.0];
+
     [context flushGraphics];
     [NSGraphicsContext restoreGraphicsState];
 
@@ -42,7 +77,6 @@
 
 + (NSBitmapImageRep*) histogramRepresentationOfData:(int*)data withWidth:(int)width andHeight:(int)height
 {
-    
     
     NSImage* outputImage = [[NSImage alloc] initWithSize:NSMakeSize(width, height)];
     
@@ -71,7 +105,7 @@
         
     [outputImage unlockFocus];
     
-    return [ImageRepresentation grayScaleRepresentationOfImage:outputImage];
+    return [self grayScaleRepresentationOfImage:outputImage];
 }
 
 
@@ -95,6 +129,7 @@
     [newFile writeToFile:[saveTo stringByExpandingTildeInPath]
               atomically:NO];
 }
+
 
 
 + (NSImage*) cacheImageFromRepresentation:(NSBitmapImageRep *)representation
