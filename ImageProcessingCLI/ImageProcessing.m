@@ -6,11 +6,11 @@
 //  Copyright © 2016 James Mitchell. All rights reserved.
 //
 
-#import "IP.h"
+#import "ImageProcessing.h"
 #import "IntArrayUtil.h"
 #import "ImageRepresentation.h"
 
-@implementation IP
+@implementation ImageProcessing
 
 #pragma mark -
 #pragma mark Filters
@@ -92,12 +92,54 @@
                 }
             }
             
+            smoothed[centre] = [IntArrayUtil maxFromArray:filter ofSize:size * size];
+        }
+    }
+    
+    return output;
+}
+
+- (NSBitmapImageRep*) minFilterOfSize:(int)size onImage:(NSImage*)image;
+{
+    // create a represenation of the origional image
+    NSBitmapImageRep *representation = [ImageRepresentation grayScaleRepresentationOfImage:image];
+    unsigned char *original = [representation bitmapData];
+    
+    // create a representation that will store the smoothed image.
+    NSBitmapImageRep *output = [ImageRepresentation grayScaleRepresentationOfImage:image];
+    unsigned char *smoothed = [output bitmapData];
+    
+    int width = image.size.width;
+    int height = image.size.height;
+    
+    int padding = (size - 1) / 2.0;
+    int filter[size * size];
+    
+    for ( int y = padding; y < height - padding; y++ )
+    {
+        for (int x = padding; x < width - padding; x++)
+        {
+            
+            int centre = x + y * width;
+            int i = 0;
+            
+            for (int s = -padding; s < (padding + 1); s++)
+            {
+                
+                for (int t = -padding; t < (padding + 1); t++)
+                {
+                    int index = (x + s) + ((y + t) * width);
+                    filter[i++] = original[index];
+                }
+            }
+            
             smoothed[centre] = [IntArrayUtil minFromArray:filter ofSize:size * size];
         }
     }
     
     return output;
 }
+
 
 - (NSBitmapImageRep*) simpleAveragingFilterOfSize:(int)size onImage:(NSImage*)image;
 {
@@ -279,6 +321,7 @@
     return output;
 }
 
+// rename!
 - (int*) normaliseConstrastHistogramData:(int*)data ofSize:(int)size
 {
     int* output = [IntArrayUtil zeroArrayOfSize:size];
@@ -300,12 +343,13 @@
 
 // constrast streching: http://homepages.inf.ed.ac.uk/rbf/HIPR2/stretch.htm
 // linear - Page 60 Princibles of Digital Image Processing.
-- (int*) automaticContrastAdjustmentOfImage:(NSImage*)image
+- (NSBitmapImageRep*) automaticContrastAdjustmentOfImage:(NSImage*)image
 {
     int range = 256;
     
-    int* output  = [IntArrayUtil zeroArrayOfSize:range];
     // create representation of image.
+    NSBitmapImageRep* representation = [ImageRepresentation grayScaleRepresentationOfImage:image];
+    unsigned char* data = [representation bitmapData];
     
     // get the histogram values.
     int* histogram = [self contrastHistogramOfImage:image];
@@ -315,27 +359,38 @@
     int low = 0;
     
     int i = 0;
-    while ( (histogram[i] == 0) && (i < range)) {
+    while ( (histogram[i] == 0) && (i < range))
+    {
         i++;
     }
     
     low = i;
     
     i = 255;
-    while ( (histogram[i] == 0) && (i > 0) ) {
+    while ( (histogram[i] == 0) && (i > 0) )
+    {
         i--;
     }
     
     high = i;
     
-    // f(a) = (a - a[low]) * 255 / a[high] - a[low]
-    for ( int i = 0; i < range; i++ )
-    {
-        output[i] = (i - low) * (255 / (high - low));
-        NSLog(@"i: %d, n:%d", i, output[i]);
-    }
+    int width = image.size.width;
+    int height = image.size.height;
 
-    return output;
+//    f(a) = (a - a[low]) * 255 / a[high] - a[low]
+    for ( int y = 0; y < height; y++ )
+    {
+        for ( int x = 0; x < width; x++ )
+        {
+            int index = x + (y * width);
+            int val = (data[index] - low) * (255 / (high - low));
+            
+            data[index] = val;
+        }
+    }
+    
+    
+    return representation;
 }
 
 // Principle of DIP Fundermentals chap.3 p.52, chap.4 p.66
@@ -364,7 +419,6 @@
  
     unsigned char *one = [rep1 bitmapData];
     unsigned char *two = [rep2 bitmapData];
-    
     unsigned char *three = [output bitmapData];
     
     int width = image1.size.width;
