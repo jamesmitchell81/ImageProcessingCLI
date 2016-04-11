@@ -41,29 +41,24 @@
 
 - (NSBitmapImageRep*) simpleDilationOfImage:(NSImage*)image
 {
-    int elem[9] = {1, 1, 1, 1, 1, 1, 1, 1, 1};
+//    int elem[9] = {1, 1, 1, 1, 1, 1, 1, 1, 1};
+    int elem[9] = {1, 0, 1, 0, 0, 0, 1, 0, 1};
     return [self processImage:image withBackground:255 andForeground:0 andStructuringElement:elem];
 }
 
 
 - (NSBitmapImageRep*) simpleErosionOfImage:(NSImage*)image
 {
-    //    int polarity = 0;
-    int elem[9] = {1, 1, 1, 1, 1, 1, 1, 1, 1};
+//    int elem[9] = {1, 1, 1, 1, 1, 1, 1, 1, 1};
+    int elem[9] = {0, 1, 0, 1, 1, 1, 0, 1, 0};
     return [self processImage:image withBackground:0 andForeground:255 andStructuringElement:elem];
 }
-
 
 - (NSBitmapImageRep*) processImage:(NSImage *)image
                     withBackground:(int)background
                      andForeground:(int)foreground
              andStructuringElement:(int [])element
 {
-    
-//    StructuringElement *elem = [StructuringElement alloc];
-//    
-//    [elem addRow:1, 1,    1, nil];
-//    [elem addRow:1, NULL, 1, nil];
     
     NSBitmapImageRep* representation = [ImageRepresentation grayScaleRepresentationOfImage:image];
     unsigned char *original = [representation bitmapData];
@@ -84,6 +79,7 @@
         {
             int centre = x + y * width;
             BOOL match = NO;
+            int i = 0;
             
             for (int s = -padding; s < (padding + 1); s++) {
                 for (int t = -padding; t < (padding + 1); t++) {
@@ -98,7 +94,6 @@
             }
             
             processed[centre] = background;
-            
             if ( match )
             {
                 processed[centre] = foreground;
