@@ -12,52 +12,48 @@
 
 @implementation Morphology
 
-- (NSBitmapImageRep*) opening:(NSImage*)image
+- (NSBitmapImageRep*) opening:(NSImage*)image ofSize:(int)size
 {
     NSImage* temp = [[NSImage alloc] initWithSize:image.size];
     
-    NSBitmapImageRep* eroded = [self simpleErosionOfImage:image];
+    NSBitmapImageRep* eroded = [self simpleErosionOfImage:image ofSize:size];
     
     temp = [ImageRepresentation cacheImageFromRepresentation:eroded];
     
-    NSBitmapImageRep* dilated = [self simpleDilationOfImage:temp];
+    NSBitmapImageRep* dilated = [self simpleDilationOfImage:temp ofSize:size];
     
     return dilated;
 }
 
-- (NSBitmapImageRep*) closing:(NSImage*)image
+- (NSBitmapImageRep*) closing:(NSImage*)image ofSize:(int)size;
 {
     NSImage* temp = [[NSImage alloc] initWithSize:image.size];
     
-    NSBitmapImageRep* dilated = [self simpleDilationOfImage:image];
+    NSBitmapImageRep* dilated = [self simpleDilationOfImage:image ofSize:size];
     
     temp = [ImageRepresentation cacheImageFromRepresentation:dilated];
     
-    NSBitmapImageRep* eroded = [self simpleErosionOfImage:temp];
+    NSBitmapImageRep* eroded = [self simpleErosionOfImage:temp ofSize:size];
     
     return eroded;
 }
 
 
-- (NSBitmapImageRep*) simpleDilationOfImage:(NSImage*)image
+- (NSBitmapImageRep*) simpleDilationOfImage:(NSImage*)image ofSize:(int)size
 {
-//    int elem[9] = {1, 1, 1, 1, 1, 1, 1, 1, 1};
-    int elem[9] = {1, 0, 1, 0, 0, 0, 1, 0, 1};
-    return [self processImage:image withBackground:255 andForeground:0 andStructuringElement:elem];
+    return [self processImage:image withBackground:255 andForeground:0 andSize:size];
 }
 
 
-- (NSBitmapImageRep*) simpleErosionOfImage:(NSImage*)image
+- (NSBitmapImageRep*) simpleErosionOfImage:(NSImage*)image ofSize:(int)size
 {
-//    int elem[9] = {1, 1, 1, 1, 1, 1, 1, 1, 1};
-    int elem[9] = {0, 1, 0, 1, 1, 1, 0, 1, 0};
-    return [self processImage:image withBackground:0 andForeground:255 andStructuringElement:elem];
+    return [self processImage:image withBackground:0 andForeground:255 andSize:size];
 }
 
 - (NSBitmapImageRep*) processImage:(NSImage *)image
                     withBackground:(int)background
                      andForeground:(int)foreground
-             andStructuringElement:(int [])element
+                           andSize:(int)size
 {
     
     NSBitmapImageRep* representation = [ImageRepresentation grayScaleRepresentationOfImage:image];
@@ -69,7 +65,6 @@
     int width = image.size.width;
     int height = image.size.height;
     
-    int size = 3;
     int padding = (size - 1) / 2.0;
     //    int filter[size * size];
     
@@ -78,8 +73,7 @@
         for (int x = padding; x < width - padding; x++)
         {
             int centre = x + y * width;
-            BOOL match = NO;
-            int i = 0;
+            BOOL hits = NO;
             
             for (int s = -padding; s < (padding + 1); s++) {
                 for (int t = -padding; t < (padding + 1); t++) {
@@ -88,13 +82,13 @@
                     
                     if ( original[index] == foreground )
                     {
-                        match = YES;
+                        hits = YES;
                     }
                 }
             }
             
             processed[centre] = background;
-            if ( match )
+            if ( hits )
             {
                 processed[centre] = foreground;
             }

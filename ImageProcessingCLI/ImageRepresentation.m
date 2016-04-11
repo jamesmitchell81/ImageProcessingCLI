@@ -13,6 +13,7 @@
 @synthesize subject;
 @synthesize original;
 @synthesize filtered;
+@synthesize thresholded;
 @synthesize current;
 
 - (void) setOriginal:(NSImage *)image
@@ -31,6 +32,12 @@
 {
     subject = [[NSImage alloc] init];
     [subject addRepresentation:[ImageRepresentation grayScaleRepresentationOfImage:image]];
+}
+
+- (void) setThresholded:(NSImage *)image
+{
+    thresholded = [[NSImage alloc] init];
+    [thresholded addRepresentation:[ImageRepresentation grayScaleRepresentationOfImage:image]];
 }
 
 - (void) resetSubject

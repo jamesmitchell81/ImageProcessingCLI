@@ -11,16 +11,16 @@
 
 @interface Morphology : NSObject
 
-- (NSBitmapImageRep*) opening:(NSImage*)image;
-- (NSBitmapImageRep*) closing:(NSImage*)image;
+- (NSBitmapImageRep*) opening:(NSImage*)image ofSize:(int)size;
+- (NSBitmapImageRep*) closing:(NSImage*)image ofSize:(int)size;
 
-- (NSBitmapImageRep*) simpleDilationOfImage:(NSImage *)image;
-- (NSBitmapImageRep*) simpleErosionOfImage:(NSImage *)image;
+- (NSBitmapImageRep*) simpleDilationOfImage:(NSImage*)image ofSize:(int)size;
+- (NSBitmapImageRep*) simpleErosionOfImage:(NSImage*)image ofSize:(int)size;
 
 - (NSBitmapImageRep*) processImage:(NSImage *)image
                     withBackground:(int)background
                      andForeground:(int)foreground
-             andStructuringElement:(int [])element;
+                           andSize:(int)element;
 
 // dilate
 // erode

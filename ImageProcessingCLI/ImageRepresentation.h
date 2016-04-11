@@ -15,12 +15,14 @@
     NSImage* current;
     NSImage* subject;
     NSImage* filtered;
+    NSImage* thresholded;
 }
 
 @property (nonatomic) NSImage* original;
 @property (nonatomic) NSImage* current;
 @property (nonatomic) NSImage* subject;
 @property (nonatomic) NSImage* filtered;
+@property (nonatomic) NSImage* thresholded;
 
 
 - (void) resetSubject;

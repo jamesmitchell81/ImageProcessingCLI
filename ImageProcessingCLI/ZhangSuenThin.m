@@ -24,8 +24,6 @@
     
     done = NO;
     
-    int i = 0;
-    
     while ( !done )
     {
         [self subIteration1];
@@ -74,6 +72,7 @@
             if ( processed[p8] == 0 ) b++;
             if ( processed[p9] == 0 ) b++;
             BOOL deleteA = ( (b <= 6) && (b >= 2) );
+//            BOOL deleteA = ( (b < 6) && (b > 2) );
 
             // b)
             if ( (processed[p2] == 255) && (processed[p3] == 0) ) a++;
@@ -144,6 +143,7 @@
             if ( processed[p8] == 0 ) b++;
             if ( processed[p9] == 0 ) b++;
             BOOL deleteA = ( (b <= 6) && (b >= 2) );
+//            BOOL deleteA = ( (b < 6) && (b > 2) );
 
             // b) transitions between 0 -> 1 (white -> block)
             if ( (processed[p2] == 255) && (processed[p3] == 0) ) a++;
@@ -172,6 +172,5 @@
     if ( change ) done = NO;
 
 }
-
 
 @end
