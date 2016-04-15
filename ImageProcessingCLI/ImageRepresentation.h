@@ -24,7 +24,6 @@
 @property (nonatomic) NSImage* filtered;
 @property (nonatomic) NSImage* thresholded;
 
-
 - (void) resetSubject;
 
 // representation.
@@ -32,7 +31,10 @@
 + (NSBitmapImageRep*) grayScaleRepresentationOfImage:(NSImage *)image;
 + (NSBitmapImageRep*) grayScaleRepresentationOfImage:(NSImage *)image
                                          withPadding:(int)padding;
-+ (NSBitmapImageRep*) histogramRepresentationOfData:(int*)data withWidth:(int)width andHeight:(int)height;
++ (NSBitmapImageRep*) grayScaleRepresentationOfImage:(NSImage *)image
+                                              atSize:(NSSize)size;
+
+
 + (void) saveImageFileFromRepresentation:(NSBitmapImageRep *)representation
                                 fileName:(NSString*)filename;
 

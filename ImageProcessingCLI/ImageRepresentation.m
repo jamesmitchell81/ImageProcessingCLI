@@ -52,6 +52,37 @@
 }
 
 + (NSBitmapImageRep*) grayScaleRepresentationOfImage:(NSImage *)image
+                                              atSize:(NSSize)size
+{
+    NSBitmapImageRep *representation = [[NSBitmapImageRep alloc]
+                                        initWithBitmapDataPlanes: NULL
+                                        pixelsWide: (int)size.width
+                                        pixelsHigh: (int)size.height
+                                        bitsPerSample: 8
+                                        samplesPerPixel: 1
+                                        hasAlpha: NO
+                                        isPlanar: NO
+                                        colorSpaceName: NSCalibratedWhiteColorSpace
+                                        bytesPerRow: (int)size.width
+                                        bitsPerPixel: 8];
+    
+    NSGraphicsContext *context = [NSGraphicsContext graphicsContextWithBitmapImageRep:representation];
+    [NSGraphicsContext saveGraphicsState];
+    [NSGraphicsContext setCurrentContext:context];
+    
+    // REFERENCE developer.apple.com/library/mac/documentation/Cocoa/Conceptual/CocoaDrawingGuide/Images/Images.html
+    [image drawInRect:NSMakeRect(0, 0, (int)size.width, (int)size.height)
+             fromRect:NSZeroRect
+            operation:NSCompositeCopy
+             fraction:1.0];
+    
+    [context flushGraphics];
+    [NSGraphicsContext restoreGraphicsState];
+    
+    return representation;
+}
+
++ (NSBitmapImageRep*) grayScaleRepresentationOfImage:(NSImage *)image
                                          withPadding:(int)padding
 {
     NSBitmapImageRep *representation = [[NSBitmapImageRep alloc]
@@ -81,40 +112,6 @@
 
     return representation;
 }
-
-+ (NSBitmapImageRep*) histogramRepresentationOfData:(int*)data withWidth:(int)width andHeight:(int)height
-{
-    
-    NSImage* outputImage = [[NSImage alloc] initWithSize:NSMakeSize(width, height)];
-    
-    [outputImage lockFocus];
-    
-        [[NSColor whiteColor] setFill];
-        [NSBezierPath fillRect:NSMakeRect(0, 0, width, height)];
-        
-        int index = 0;
-        
-        for ( int y = height - 1; y > 0; y-- )
-        {
-            int density = data[index++];
-            
-            NSPoint start = NSMakePoint(0, (float)y + 0.5);
-            NSPoint end = NSMakePoint(density, (float)y + 0.5);
-            
-            NSBezierPath* path = [[NSBezierPath alloc] init];
-            
-            [path moveToPoint:start];
-            [path lineToPoint:end];
-            
-            [path setLineWidth:1.0];
-            [path stroke];
-        }
-        
-    [outputImage unlockFocus];
-    
-    return [self grayScaleRepresentationOfImage:outputImage];
-}
-
 
 /*
  * Saves image to disk for my inspection.

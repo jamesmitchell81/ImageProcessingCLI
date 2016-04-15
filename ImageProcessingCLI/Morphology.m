@@ -8,44 +8,35 @@
 
 #import "Morphology.h"
 #import "ImageRepresentation.h"
-#import "StructuringElement.h"
 
 @implementation Morphology
 
-- (NSBitmapImageRep*) opening:(NSImage*)image ofSize:(int)size
+- (NSBitmapImageRep*) openingOnImage:(NSImage*)image withNeighbourhoodSize:(int)size
 {
     NSImage* temp = [[NSImage alloc] initWithSize:image.size];
-    
-    NSBitmapImageRep* eroded = [self simpleErosionOfImage:image ofSize:size];
-    
+    NSBitmapImageRep* eroded = [self simpleErosionOfImage:image withNeighbourhoodSize:size];
     temp = [ImageRepresentation cacheImageFromRepresentation:eroded];
-    
-    NSBitmapImageRep* dilated = [self simpleDilationOfImage:temp ofSize:size];
-    
+    NSBitmapImageRep* dilated = [self simpleDilationOfImage:temp withNeighbourhoodSize:size];
     return dilated;
 }
 
-- (NSBitmapImageRep*) closing:(NSImage*)image ofSize:(int)size;
+- (NSBitmapImageRep*) closingOnImage:(NSImage*)image withNeighbourhoodSize:(int)size
 {
     NSImage* temp = [[NSImage alloc] initWithSize:image.size];
-    
-    NSBitmapImageRep* dilated = [self simpleDilationOfImage:image ofSize:size];
-    
+    NSBitmapImageRep* dilated = [self simpleDilationOfImage:image withNeighbourhoodSize:size];
     temp = [ImageRepresentation cacheImageFromRepresentation:dilated];
-    
-    NSBitmapImageRep* eroded = [self simpleErosionOfImage:temp ofSize:size];
-    
+    NSBitmapImageRep* eroded = [self simpleErosionOfImage:temp withNeighbourhoodSize:size];
     return eroded;
 }
 
 
-- (NSBitmapImageRep*) simpleDilationOfImage:(NSImage*)image ofSize:(int)size
+- (NSBitmapImageRep*) simpleDilationOfImage:(NSImage*)image withNeighbourhoodSize:(int)size
 {
     return [self processImage:image withBackground:255 andForeground:0 andSize:size];
 }
 
 
-- (NSBitmapImageRep*) simpleErosionOfImage:(NSImage*)image ofSize:(int)size
+- (NSBitmapImageRep*) simpleErosionOfImage:(NSImage*)image withNeighbourhoodSize:(int)size
 {
     return [self processImage:image withBackground:0 andForeground:255 andSize:size];
 }
@@ -53,7 +44,7 @@
 - (NSBitmapImageRep*) processImage:(NSImage *)image
                     withBackground:(int)background
                      andForeground:(int)foreground
-                           andSize:(int)size
+              andNeighbourhoodSize:(int)size
 {
     
     NSBitmapImageRep* representation = [ImageRepresentation grayScaleRepresentationOfImage:image];

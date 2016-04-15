@@ -19,24 +19,24 @@
     width = image.size.width;
     height = image.size.height;
     
-    NSBitmapImageRep* output = [ImageRepresentation grayScaleRepresentationOfImage:image];
-    processed = [output bitmapData];
+    NSBitmapImageRep* outputRepresentation = [ImageRepresentation grayScaleRepresentationOfImage:image];
+    output = [outputRepresentation bitmapData];
     
-    done = NO;
+    complete = NO;
     
-    while ( !done )
+    while ( !complete )
     {
         [self subIteration1];
         [self subIteration2];
     }
     
-    return output;
+    return outputRepresentation;
 }
 
 - (void) subIteration1
 {
     
-    done = YES;
+    complete = YES;
     BOOL change = NO;
     
     int size = 3;
@@ -46,9 +46,9 @@
     {
         for (int x = padding; x < width - padding; x++)
         {
-            int p1 = (x) + (y * width);
+            int p1 = (x) + (y * width); // centre
             
-            if ( processed[p1] != 0 ) continue;
+            if ( output[p1] != 0 ) continue;
             
             int a = 0;
             int b = 0;
@@ -63,49 +63,50 @@
             int p9 = (x - 1) + ((y - 1) * width);
             
             // a)
-            if ( processed[p2] == 0 ) b++;
-            if ( processed[p3] == 0 ) b++;
-            if ( processed[p4] == 0 ) b++;
-            if ( processed[p5] == 0 ) b++;
-            if ( processed[p6] == 0 ) b++;
-            if ( processed[p7] == 0 ) b++;
-            if ( processed[p8] == 0 ) b++;
-            if ( processed[p9] == 0 ) b++;
+            if ( output[p2] == 0 ) b++;
+            if ( output[p3] == 0 ) b++;
+            if ( output[p4] == 0 ) b++;
+            if ( output[p5] == 0 ) b++;
+            if ( output[p6] == 0 ) b++;
+            if ( output[p7] == 0 ) b++;
+            if ( output[p8] == 0 ) b++;
+            if ( output[p9] == 0 ) b++;
             BOOL deleteA = ( (b <= 6) && (b >= 2) );
 //            BOOL deleteA = ( (b < 6) && (b > 2) );
 
+            
             // b)
-            if ( (processed[p2] == 255) && (processed[p3] == 0) ) a++;
-            if ( (processed[p3] == 255) && (processed[p4] == 0) ) a++;
-            if ( (processed[p4] == 255) && (processed[p5] == 0) ) a++;
-            if ( (processed[p5] == 255) && (processed[p6] == 0) ) a++;
-            if ( (processed[p6] == 255) && (processed[p7] == 0) ) a++;
-            if ( (processed[p7] == 255) && (processed[p8] == 0) ) a++;
-            if ( (processed[p8] == 255) && (processed[p9] == 0) ) a++;
-            if ( (processed[p9] == 255) && (processed[p2] == 0) ) a++;
+            if ( (output[p2] == 255) && (output[p3] == 0) ) a++;
+            if ( (output[p3] == 255) && (output[p4] == 0) ) a++;
+            if ( (output[p4] == 255) && (output[p5] == 0) ) a++;
+            if ( (output[p5] == 255) && (output[p6] == 0) ) a++;
+            if ( (output[p6] == 255) && (output[p7] == 0) ) a++;
+            if ( (output[p7] == 255) && (output[p8] == 0) ) a++;
+            if ( (output[p8] == 255) && (output[p9] == 0) ) a++;
+            if ( (output[p9] == 255) && (output[p2] == 0) ) a++;
             BOOL deleteB = (a == 1);
             
             // c) and d) if neighbours are white.
-            BOOL deleteC = ((processed[p2] == 255) || (processed[p4] == 255) || (processed[p6] == 255));
-            BOOL deleteD = ((processed[p4] == 255) || (processed[p6] == 255) || (processed[p8] == 255 ));
+            BOOL deleteC = ((output[p2] == 255) || (output[p4] == 255) || (output[p6] == 255));
+            BOOL deleteD = ((output[p4] == 255) || (output[p6] == 255) || (output[p8] == 255 ));
             
             if ( deleteA && deleteB && deleteC && deleteD )
             {
-                processed[p1] = 255;
+                output[p1] = 255;
                 change = YES;
             }
 
         }
     }
     
-    if ( change ) done = NO;
+    if ( change ) complete = NO;
 
 }
 
 
 - (void) subIteration2
 {
-    done = YES;
+    complete = YES;
     
     BOOL change = NO;
     
@@ -119,7 +120,7 @@
 
             int p1 = (x) + (y * width);
             
-            if ( processed[p1] != 0 ) continue;
+            if ( output[p1] != 0 ) continue;
             
             int a = 0;
             int b = 0;
@@ -134,42 +135,42 @@
             int p9 = (x - 1) + ((y - 1) * width);
             
             // a) has 3, 4, 5 neighbours
-            if ( processed[p2] == 0 ) b++;
-            if ( processed[p3] == 0 ) b++;
-            if ( processed[p4] == 0 ) b++;
-            if ( processed[p5] == 0 ) b++;
-            if ( processed[p6] == 0 ) b++;
-            if ( processed[p7] == 0 ) b++;
-            if ( processed[p8] == 0 ) b++;
-            if ( processed[p9] == 0 ) b++;
+            if ( output[p2] == 0 ) b++;
+            if ( output[p3] == 0 ) b++;
+            if ( output[p4] == 0 ) b++;
+            if ( output[p5] == 0 ) b++;
+            if ( output[p6] == 0 ) b++;
+            if ( output[p7] == 0 ) b++;
+            if ( output[p8] == 0 ) b++;
+            if ( output[p9] == 0 ) b++;
             BOOL deleteA = ( (b <= 6) && (b >= 2) );
 //            BOOL deleteA = ( (b < 6) && (b > 2) );
 
             // b) transitions between 0 -> 1 (white -> block)
-            if ( (processed[p2] == 255) && (processed[p3] == 0) ) a++;
-            if ( (processed[p3] == 255) && (processed[p4] == 0) ) a++;
-            if ( (processed[p4] == 255) && (processed[p5] == 0) ) a++;
-            if ( (processed[p5] == 255) && (processed[p6] == 0) ) a++;
-            if ( (processed[p6] == 255) && (processed[p7] == 0) ) a++;
-            if ( (processed[p7] == 255) && (processed[p8] == 0) ) a++;
-            if ( (processed[p8] == 255) && (processed[p9] == 0) ) a++;
-            if ( (processed[p9] == 255) && (processed[p2] == 0) ) a++;
+            if ( (output[p2] == 255) && (output[p3] == 0) ) a++;
+            if ( (output[p3] == 255) && (output[p4] == 0) ) a++;
+            if ( (output[p4] == 255) && (output[p5] == 0) ) a++;
+            if ( (output[p5] == 255) && (output[p6] == 0) ) a++;
+            if ( (output[p6] == 255) && (output[p7] == 0) ) a++;
+            if ( (output[p7] == 255) && (output[p8] == 0) ) a++;
+            if ( (output[p8] == 255) && (output[p9] == 0) ) a++;
+            if ( (output[p9] == 255) && (output[p2] == 0) ) a++;
             BOOL deleteB = (a == 1);
             
             // c)
-            BOOL deleteC = ( (processed[p2] == 255) || (processed[p4] == 255) || (processed[p6] == 255) );
-            BOOL deleteD = ( (processed[p2] == 255) || (processed[p6] == 255) || (processed[p8] == 255) );
+            BOOL deleteC = ( (output[p2] == 255) || (output[p4] == 255) || (output[p6] == 255) );
+            BOOL deleteD = ( (output[p2] == 255) || (output[p6] == 255) || (output[p8] == 255) );
 
             if ( deleteA && deleteB && deleteC && deleteD )
             {
-                processed[p1] = 255;
+                output[p1] = 255;
                 change = YES;
             }
 
         }
     }
     
-    if ( change ) done = NO;
+    if ( change ) complete = NO;
 
 }
 

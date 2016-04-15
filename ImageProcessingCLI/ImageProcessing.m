@@ -249,24 +249,6 @@
     return output;
 }
 
-- (NSImage*) reduceNoiseWithCIMedianFilterOnImage:(NSImage *)image
-{
-    CIFilter *filter = [CIFilter filterWithName:@"CINoiseReduction"];
-    
-    [filter setValue:[NSNumber numberWithFloat:0.10] forKey:@"inputNoiseLevel"];
-    
-    // http://stackoverflow.com/questions/10764249/get-nsimage-from-cifilter-ciradialgradient
-    [image lockFocus];
-    [[filter valueForKey:@"inputImage"]
-     drawAtPoint: NSZeroPoint
-     fromRect: NSMakeRect(0, 0, image.size.width, image.size.height)
-     operation:NSCompositeDestinationAtop  fraction:1.0
-     ];
-    [image unlockFocus];
-    
-    return image;
-}
-
 #pragma mark -
 #pragma mark Thresholding
 

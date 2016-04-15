@@ -12,6 +12,6 @@
 @interface ImageAnalysis : NSObject
 
 - (int*) pixelAreaDensityOfImage:(NSImage*)image;
-
+- (NSBitmapImageRep*) histogramRepresentationOfData:(int*)data withWidth:(int)width andHeight:(int)height;
 
 @end

@@ -13,19 +13,12 @@
 {
     int width;
     int height;
-    
-    BOOL done;
-    
-    unsigned char* processed;
-//
-//    NSBitmapImageRep* representation;
-//    NSBitmapImageRep* output;
+    BOOL complete;
+    unsigned char* output;
 }
 
 - (NSBitmapImageRep*) thinImage:(NSImage*)image;
-
-// make private.
-- (void) subIteration1; //:(unsigned char*)original new:(unsigned char*)processed;
-- (void) subIteration2;//:(unsigned char*)original new:(unsigned char*)processed;
+- (void) subIteration1;
+- (void) subIteration2;
 
 @end

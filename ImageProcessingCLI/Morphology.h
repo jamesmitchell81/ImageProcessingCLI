@@ -11,11 +11,12 @@
 
 @interface Morphology : NSObject
 
-- (NSBitmapImageRep*) opening:(NSImage*)image ofSize:(int)size;
-- (NSBitmapImageRep*) closing:(NSImage*)image ofSize:(int)size;
 
-- (NSBitmapImageRep*) simpleDilationOfImage:(NSImage*)image ofSize:(int)size;
-- (NSBitmapImageRep*) simpleErosionOfImage:(NSImage*)image ofSize:(int)size;
+- (NSBitmapImageRep*) openingOnImage:(NSImage*)image withNeighbourhoodSize:(int)size;
+- (NSBitmapImageRep*) closingOnImage:(NSImage*)image withNeighbourhoodSize:(int)size;
+
+- (NSBitmapImageRep*) simpleDilationOfImage:(NSImage*)image withNeighbourhoodSize:(int)size;
+- (NSBitmapImageRep*) simpleErosionOfImage:(NSImage*)image withNeighbourhoodSize:(int)size;
 
 - (NSBitmapImageRep*) processImage:(NSImage *)image
                     withBackground:(int)background

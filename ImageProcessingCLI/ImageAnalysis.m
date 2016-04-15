@@ -54,5 +54,39 @@
     return output;
 }
 
+- (NSBitmapImageRep*) histogramRepresentationOfData:(int*)data
+                                          withWidth:(int)width
+                                          andHeight:(int)height
+{
+    NSImage* outputImage = [[NSImage alloc] initWithSize:NSMakeSize(width, height)];
+    
+    [outputImage lockFocus];
+    
+    [[NSColor whiteColor] setFill];
+    [NSBezierPath fillRect:NSMakeRect(0, 0, width, height)];
+    
+    int index = 0;
+    
+    for ( int y = height - 1; y > 0; y-- )
+    {
+        int density = data[index++];
+        
+        NSPoint start = NSMakePoint(0, (float)y + 0.5);
+        NSPoint end = NSMakePoint(density, (float)y + 0.5);
+        
+        NSBezierPath* path = [[NSBezierPath alloc] init];
+        
+        [path moveToPoint:start];
+        [path lineToPoint:end];
+        
+        [path setLineWidth:1.0];
+        [path stroke];
+    }
+    
+    [outputImage unlockFocus];
+
+    return [ImageRepresentation grayScaleRepresentationOfImage:outputImage];
+}
+
 
 @end
