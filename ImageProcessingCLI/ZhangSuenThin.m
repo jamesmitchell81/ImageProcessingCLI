@@ -29,7 +29,8 @@
         [self subIteration1];
         [self subIteration2];
     }
-    
+
+
     return outputRepresentation;
 }
 
@@ -46,8 +47,8 @@
     {
         for (int x = padding; x < width - padding; x++)
         {
-            int p1 = (x) + (y * width); // centre
-            
+            int p1 = (x) + (y * width);
+
             if ( output[p1] != 0 ) continue;
             
             int a = 0;
@@ -71,9 +72,7 @@
             if ( output[p7] == 0 ) b++;
             if ( output[p8] == 0 ) b++;
             if ( output[p9] == 0 ) b++;
-            BOOL deleteA = ( (b <= 6) && (b >= 2) );
-//            BOOL deleteA = ( (b < 6) && (b > 2) );
-
+            BOOL deleteA = ( (b <= 6) && (b >= 3) );
             
             // b)
             if ( (output[p2] == 255) && (output[p3] == 0) ) a++;
@@ -88,7 +87,7 @@
             
             // c) and d) if neighbours are white.
             BOOL deleteC = ((output[p2] == 255) || (output[p4] == 255) || (output[p6] == 255));
-            BOOL deleteD = ((output[p4] == 255) || (output[p6] == 255) || (output[p8] == 255 ));
+            BOOL deleteD = ((output[p4] == 255) || (output[p6] == 255) || (output[p8] == 255));
             
             if ( deleteA && deleteB && deleteC && deleteD )
             {
@@ -143,7 +142,7 @@
             if ( output[p7] == 0 ) b++;
             if ( output[p8] == 0 ) b++;
             if ( output[p9] == 0 ) b++;
-            BOOL deleteA = ( (b <= 6) && (b >= 2) );
+            BOOL deleteA = ( (b <= 6) && (b >= 3) );
 //            BOOL deleteA = ( (b < 6) && (b > 2) );
 
             // b) transitions between 0 -> 1 (white -> block)
