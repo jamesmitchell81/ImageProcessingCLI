@@ -62,7 +62,7 @@
             int p7 = (x + 1) + ((y - 1) * width);
             int p8 = (x) + ((y - 1) * width);
             int p9 = (x - 1) + ((y - 1) * width);
-            
+
             // a)
             if ( output[p2] == 0 ) b++;
             if ( output[p3] == 0 ) b++;
@@ -143,7 +143,6 @@
             if ( output[p8] == 0 ) b++;
             if ( output[p9] == 0 ) b++;
             BOOL deleteA = ( (b <= 6) && (b >= 3) );
-//            BOOL deleteA = ( (b < 6) && (b > 2) );
 
             // b) transitions between 0 -> 1 (white -> block)
             if ( (output[p2] == 255) && (output[p3] == 0) ) a++;

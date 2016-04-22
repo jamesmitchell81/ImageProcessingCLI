@@ -21,10 +21,6 @@
 - (NSBitmapImageRep*) processImage:(NSImage *)image
                     withBackground:(int)background
                      andForeground:(int)foreground
-                           andSize:(int)element;
-
-// dilate
-// erode
-// thin
+              andNeighbourhoodSize:(int)element;
 
 @end

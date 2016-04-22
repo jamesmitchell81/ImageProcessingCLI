@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 #import "IntArrayUtil.h"
-#import "IP.h"
+#import "ImageProcessing.h"
 #import "ImageRepresentation.h"
 #import "Morphology.h"
 #import "ZhangSuenThin.h"
@@ -22,7 +22,7 @@
 int main(int argc, const char * argv[]) {
     @autoreleasepool {
 
-        IP *ip = [IP alloc];
+        ImageProcessing *ip = [ImageProcessing alloc];
         Morphology *morph = [Morphology alloc];
 
 //        NSString *file = [@"~/Documents/School 3/-Dissertation/6b. Image Processing And Analysis/img/samples/reddit/edittheshittysunset.jpg" stringByExpandingTildeInPath];
@@ -32,11 +32,11 @@ int main(int argc, const char * argv[]) {
 //        NSString *file = [@"~/Documents/School 3/-Dissertation/6b. Image Processing And Analysis/img/samples/reddit/AlexDSSF.jpg" stringByExpandingTildeInPath];
         
 //        NSString* file = [@"~/Desktop/Cropped.png" stringByExpandingTildeInPath];
-        NSString* file = [@"~/Desktop/hard-h.png" stringByExpandingTildeInPath];
+        NSString* file = [@"~/Desktop/buddhasminion.jpg" stringByExpandingTildeInPath];
         NSImage* image = [[NSImage alloc] initByReferencingFile:file];
         
 //        image = [ip reduceNoiseWithCIMedianFilterOnImage:image];
-        NSBitmapImageRep* representation = [ImageRepresentation grayScaleRepresentationOfImage:image];
+//        NSBitmapImageRep* representation = [ImageRepresentation grayScaleRepresentationOfImage:image];
 //        ip.pixels = [representation bitmapData];
 
 //        NSBitmapImageRep* smoothed = [ip simpleAveragingFilterOfSize:3 onImage:image];
@@ -51,25 +51,25 @@ int main(int argc, const char * argv[]) {
         
 //        NSImage* newImage = [ImageRepresentation cacheImageFromRepresentation:thresholded];
 //        
-//        NSBitmapImageRep* dilate = [morph simpleDilationOfImage:newImage];
+        NSBitmapImageRep* dilate = [morph simpleDilationOfImage:(NSImage*)image withNeighbourhoodSize:(int)3];
 //        NSBitmapImageRep* erode = [morph simpleErosionOfImage:newImage];
-//        NSImage* dilated = [ImageRepresentation cacheImageFromRepresentation:dilate];
-//        
-//        NSBitmapImageRep* difference = [ip imageDifferenceOf:image and:dilated];
-//        NSImage* negative = [ImageRepresentation cacheImageFromRepresentation:difference];
-//        
-//        NSBitmapImageRep* negated = [ip imageNegativeOf:negative];
-//        NSBitmapImageRep* opened = [morph opening:image];
+        NSImage* dilated = [ImageRepresentation cacheImageFromRepresentation:dilate];
+        
+        NSBitmapImageRep* difference = [ip imageDifferenceOf:image and:dilated];
+        NSImage* negative = [ImageRepresentation cacheImageFromRepresentation:difference];
+        
+        NSBitmapImageRep* negated = [ip imageNegativeOf:negative];
+//        NSBitmapImageRep* opened = [morph openingOnImage:(NSImage*)image withNeighbourhoodSize:(int)3];
 //        NSBitmapImageRep* closed = [morph closing:image];
         
-        NSImage* imageToThin = [ImageRepresentation cacheImageFromRepresentation:thresholded];
+//        NSImage* imageToThin = [ImageRepresentation cacheImageFromRepresentation:thresholded];
 //        NSImage* imageToThin = [ImageRepresentation cacheImageFromRepresentation:negated];
         
-        ZhangSuenThin* thinning = [ZhangSuenThin alloc];
-        NSBitmapImageRep* thin = [thinning thinImage:imageToThin];
+//        ZhangSuenThin* thinning = [ZhangSuenThin alloc];
+//        NSBitmapImageRep* thin = [thinning thinImage:imageToThin];
         
 //        NSImage* thinnedImage = [ImageRepresentation cacheImageFromRepresentation:thin];
-        NSImage* thinnedImage = [ImageRepresentation cacheImageFromRepresentation:thresholded];
+//        NSImage* thinnedImage = [ImageRepresentation cacheImageFromRepresentation:thresholded];
         
 //        int height = thinnedImage.size.height;
         
@@ -97,6 +97,8 @@ int main(int argc, const char * argv[]) {
 //        NSBitmapImageRep* autoContrast = [ip automaticContrastAdjustmentOfImage:imageAutoContrast];
         
         
+        
+        
 //        imageAutoContrast = [ImageRepresentation cacheImageFromRepresentation:autoContrast];
 //        int* autoContrastHistogram = [ip contrastHistogramOfImage:imageAutoContrast];
 //        autoContrastHistogram = [ip normaliseConstrastHistogramData:autoContrastHistogram ofSize:256];
@@ -113,16 +115,16 @@ int main(int argc, const char * argv[]) {
 //        [ImageRepresentation saveImageFileFromRepresentation:areaDensityHistogramRep fileName:@"areaDensity"];
 //        [ImageRepresentation saveImageFileFromRepresentation:max fileName:@"max"];
 //        [ImageRepresentation saveImageFileFromRepresentation:median fileName:@"median"];
-        [ImageRepresentation saveImageFileFromRepresentation:thresholded fileName:@"thresholded"];
+//        [ImageRepresentation saveImageFileFromRepresentation:thresholded fileName:@"thresholded"];
 //        [ImageRepresentation saveImageFileFromRepresentation:smoothed fileName:@"smoothed"];
-        [ImageRepresentation saveImageFileFromRepresentation:representation fileName:@"original"];
+//        [ImageRepresentation saveImageFileFromRepresentation:representation fileName:@"original"];
 //        [ImageRepresentation saveImageFileFromRepresentation:dilate fileName:@"dilated"];
 //        [ImageRepresentation saveImageFileFromRepresentation:erode fileName:@"eroded"];
-//        [ImageRepresentation saveImageFileFromRepresentation:difference fileName:@"difference"];
+        [ImageRepresentation saveImageFileFromRepresentation:difference fileName:@"difference"];
 //        [ImageRepresentation saveImageFileFromRepresentation:opened fileName:@"opened"];
 //        [ImageRepresentation saveImageFileFromRepresentation:closed fileName:@"closed"];
-        [ImageRepresentation saveImageFileFromRepresentation:thin fileName:@"thinned"];
-//        [ImageRepresentation saveImageFileFromRepresentation:negated fileName:@"negated"];
+//        [ImageRepresentation saveImageFileFromRepresentation:thin fileName:@"thinned"];
+        [ImageRepresentation saveImageFileFromRepresentation:negated fileName:@"negated"];
     }
     return 0;
 }

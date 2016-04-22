@@ -391,7 +391,8 @@
 #pragma mark -
 #pragma mark Other
 
-- (NSBitmapImageRep*) imageDifferenceOf:(NSImage*)image1 and:(NSImage*)image2
+- (NSBitmapImageRep*) imageDifferenceOf:(NSImage*)image1
+                                    and:(NSImage*)image2
 {
     NSImage* outputImage = [[NSImage alloc] initWithSize:image1.size];
     

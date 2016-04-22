@@ -11,34 +11,48 @@
 
 @implementation Morphology
 
-- (NSBitmapImageRep*) openingOnImage:(NSImage*)image withNeighbourhoodSize:(int)size
+- (NSBitmapImageRep*) openingOnImage:(NSImage*)image
+               withNeighbourhoodSize:(int)size
 {
     NSImage* temp = [[NSImage alloc] initWithSize:image.size];
-    NSBitmapImageRep* eroded = [self simpleErosionOfImage:image withNeighbourhoodSize:size];
+    NSBitmapImageRep* eroded = [self simpleErosionOfImage:image
+                                    withNeighbourhoodSize:size];
+
     temp = [ImageRepresentation cacheImageFromRepresentation:eroded];
-    NSBitmapImageRep* dilated = [self simpleDilationOfImage:temp withNeighbourhoodSize:size];
+    NSBitmapImageRep* dilated = [self simpleDilationOfImage:temp
+                                      withNeighbourhoodSize:size];
     return dilated;
 }
 
-- (NSBitmapImageRep*) closingOnImage:(NSImage*)image withNeighbourhoodSize:(int)size
+- (NSBitmapImageRep*) closingOnImage:(NSImage*)image
+               withNeighbourhoodSize:(int)size
 {
     NSImage* temp = [[NSImage alloc] initWithSize:image.size];
-    NSBitmapImageRep* dilated = [self simpleDilationOfImage:image withNeighbourhoodSize:size];
+    NSBitmapImageRep* dilated = [self simpleDilationOfImage:image
+                                      withNeighbourhoodSize:size];
+
     temp = [ImageRepresentation cacheImageFromRepresentation:dilated];
-    NSBitmapImageRep* eroded = [self simpleErosionOfImage:temp withNeighbourhoodSize:size];
+    NSBitmapImageRep* eroded = [self simpleErosionOfImage:temp
+                                    withNeighbourhoodSize:size];
     return eroded;
 }
 
 
 - (NSBitmapImageRep*) simpleDilationOfImage:(NSImage*)image withNeighbourhoodSize:(int)size
 {
-    return [self processImage:image withBackground:255 andForeground:0 andSize:size];
+    return [self processImage:image
+               withBackground:255
+                andForeground:0
+         andNeighbourhoodSize:size];
 }
 
 
 - (NSBitmapImageRep*) simpleErosionOfImage:(NSImage*)image withNeighbourhoodSize:(int)size
 {
-    return [self processImage:image withBackground:0 andForeground:255 andSize:size];
+    return [self processImage:image
+               withBackground:0
+                andForeground:255
+         andNeighbourhoodSize:size];
 }
 
 - (NSBitmapImageRep*) processImage:(NSImage *)image

@@ -9,12 +9,11 @@
 /* Begin PBXBuildFile section */
 		885A782A1C661E9300C3510A /* IntArrayUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 885A78291C661E9300C3510A /* IntArrayUtil.m */; };
 		885A782E1C66328F00C3510A /* ImageRepresentation.m in Sources */ = {isa = PBXBuildFile; fileRef = 885A782D1C66328F00C3510A /* ImageRepresentation.m */; };
-		885FCD011C42848600D064A3 /* IP.m in Sources */ = {isa = PBXBuildFile; fileRef = 885FCCFF1C42848600D064A3 /* IP.m */; };
+		885FCD011C42848600D064A3 /* ImageProcessing.m in Sources */ = {isa = PBXBuildFile; fileRef = 885FCCFF1C42848600D064A3 /* ImageProcessing.m */; };
 		885FCD021C42848600D064A3 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 885FCD001C42848600D064A3 /* main.m */; };
 		889F2E081C69066E006DD002 /* ZhangSuenThin.m in Sources */ = {isa = PBXBuildFile; fileRef = 889F2E071C69066E006DD002 /* ZhangSuenThin.m */; };
 		88A55E7A1C7B654700B37CCD /* ImageAnalysis.m in Sources */ = {isa = PBXBuildFile; fileRef = 88A55E791C7B654700B37CCD /* ImageAnalysis.m */; };
 		88D6001F1C63CC1200AC8200 /* Morphology.m in Sources */ = {isa = PBXBuildFile; fileRef = 88D6001E1C63CC1200AC8200 /* Morphology.m */; };
-		88E733AD1C6A4E5A00263243 /* StructuringElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 88E733AC1C6A4E5A00263243 /* StructuringElement.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -34,8 +33,8 @@
 		885A78291C661E9300C3510A /* IntArrayUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IntArrayUtil.m; sourceTree = "<group>"; };
 		885A782C1C66328F00C3510A /* ImageRepresentation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageRepresentation.h; sourceTree = "<group>"; };
 		885A782D1C66328F00C3510A /* ImageRepresentation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageRepresentation.m; sourceTree = "<group>"; };
-		885FCCFE1C42848600D064A3 /* IP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IP.h; sourceTree = "<group>"; };
-		885FCCFF1C42848600D064A3 /* IP.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IP.m; sourceTree = "<group>"; };
+		885FCCFE1C42848600D064A3 /* ImageProcessing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageProcessing.h; sourceTree = "<group>"; };
+		885FCCFF1C42848600D064A3 /* ImageProcessing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageProcessing.m; sourceTree = "<group>"; };
 		885FCD001C42848600D064A3 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		889F2E061C69066E006DD002 /* ZhangSuenThin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZhangSuenThin.h; sourceTree = "<group>"; };
 		889F2E071C69066E006DD002 /* ZhangSuenThin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZhangSuenThin.m; sourceTree = "<group>"; };
@@ -44,8 +43,6 @@
 		88C9AD941C41A27100E5CA26 /* ImageProcessingCLI */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ImageProcessingCLI; sourceTree = BUILT_PRODUCTS_DIR; };
 		88D6001D1C63CC1200AC8200 /* Morphology.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Morphology.h; sourceTree = "<group>"; };
 		88D6001E1C63CC1200AC8200 /* Morphology.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Morphology.m; sourceTree = "<group>"; };
-		88E733AB1C6A4E5A00263243 /* StructuringElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StructuringElement.h; sourceTree = "<group>"; };
-		88E733AC1C6A4E5A00263243 /* StructuringElement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StructuringElement.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,8 +59,6 @@
 		885A782B1C66202200C3510A /* Util */ = {
 			isa = PBXGroup;
 			children = (
-				88E733AB1C6A4E5A00263243 /* StructuringElement.h */,
-				88E733AC1C6A4E5A00263243 /* StructuringElement.m */,
 				885A78281C661E9300C3510A /* IntArrayUtil.h */,
 				885A78291C661E9300C3510A /* IntArrayUtil.m */,
 			);
@@ -90,8 +85,8 @@
 			isa = PBXGroup;
 			children = (
 				885FCD001C42848600D064A3 /* main.m */,
-				885FCCFE1C42848600D064A3 /* IP.h */,
-				885FCCFF1C42848600D064A3 /* IP.m */,
+				885FCCFE1C42848600D064A3 /* ImageProcessing.h */,
+				885FCCFF1C42848600D064A3 /* ImageProcessing.m */,
 				88D6001D1C63CC1200AC8200 /* Morphology.h */,
 				88D6001E1C63CC1200AC8200 /* Morphology.m */,
 				885A782C1C66328F00C3510A /* ImageRepresentation.h */,
@@ -161,12 +156,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				88E733AD1C6A4E5A00263243 /* StructuringElement.m in Sources */,
 				88A55E7A1C7B654700B37CCD /* ImageAnalysis.m in Sources */,
 				88D6001F1C63CC1200AC8200 /* Morphology.m in Sources */,
 				885A782A1C661E9300C3510A /* IntArrayUtil.m in Sources */,
 				885FCD021C42848600D064A3 /* main.m in Sources */,
-				885FCD011C42848600D064A3 /* IP.m in Sources */,
+				885FCD011C42848600D064A3 /* ImageProcessing.m in Sources */,
 				889F2E081C69066E006DD002 /* ZhangSuenThin.m in Sources */,
 				885A782E1C66328F00C3510A /* ImageRepresentation.m in Sources */,
 			);
